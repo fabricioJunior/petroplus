@@ -1,16 +1,23 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:petroplus/blocs/add_passager_bloc/add_passager_bloc.dart';
+import 'package:petroplus/providers/providers.dart';
+import 'package:petroplus/repositories/orders_repository.dart';
 import 'package:petroplus/screen/splash/splash_screen.dart';
 import 'package:petroplus/storages/storages_controller.dart';
 import 'package:provider/provider.dart';
+import 'autenticacao/http_interceptos.dart';
 import 'controler_provider/inc_controller.dart';
+import 'data_access/cache/orders_store.dart';
 import 'data_access/cache/petroplus_storages.dart';
+import 'data_access/clients/orders_client.dart';
 
 void main() async {
   await Hive.initFlutter();
-  await inicializarStorage(petroplus_storages);
+  await inicializarStorage(PETROPLUS_STORAGES);
 
   WidgetsFlutterBinding.ensureInitialized();
   if (!kIsWeb) {
@@ -44,6 +51,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => IncController(),
         ),
+        Provider<AddPassagerBloc>(
+          create: (context) => AddPassagerBloc(
+            OrdersRepository(
+              OrdersClient(client()),
+              OrdersStore(),
+            ),
+          ),
+        )
       ],
       child: const MaterialApp(
         // home: ChangeNotifierProvider(
@@ -51,6 +66,15 @@ class MyApp extends StatelessWidget {
         //   create: (_) => IncController(),
         // ),
         debugShowCheckedModeBanner: false,
+      ),
+    );
+  }
+
+  RepositoryProvider<OrdersRepository> _orderRepositoryProvider() {
+    return RepositoryProvider(
+      create: (context) => OrdersRepository(
+        OrdersClient(client()),
+        OrdersStore(),
       ),
     );
   }

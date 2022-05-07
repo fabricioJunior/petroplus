@@ -128,11 +128,6 @@ class ReceptionChecklistsMobile extends StatelessWidget {
                             builder: (context) => AddPassenger(),
                           ),
                         );
-                        // ScaffoldMessenger.of(context).showSnackBar(
-                        //   SnackBar(
-                        //     content: Text("Deslogado com sucesso!"),
-                        //   ),
-                        // );
                       },
                       child: Text(
                         "Adicionar Passante",
