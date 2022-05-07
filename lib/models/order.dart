@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
+import 'package:petroplus/storages/storage_entity.dart';
 
-class Order extends Equatable {
+class Order extends Equatable with StorageEntity {
   final DateTime createdAt;
   final DateTime updateAt;
   final int id;
@@ -19,6 +20,12 @@ class Order extends Equatable {
         id = json['id'],
         licensePlate = json['licensePlate'];
 
+  Order.fromStorage(Map<String, dynamic> props)
+      : createdAt = props['createdAt'],
+        updateAt = props['updatedAt'],
+        id = props['id'],
+        licensePlate = props['licensePlate'];
+
   @override
   List<Object?> get props => [
         createdAt,
@@ -26,4 +33,12 @@ class Order extends Equatable {
         id,
         licensePlate,
       ];
+
+  @override
+  Map<String, dynamic> get storageProperties => {
+        'createdAt': createdAt,
+        'updateAt': updateAt,
+        'id': id,
+        'licensePlate': licensePlate,
+      };
 }

@@ -1,12 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:petroplus/screen/splash/splash_screen.dart';
+import 'package:petroplus/storages/storages_controller.dart';
 import 'package:provider/provider.dart';
-
 import 'controler_provider/inc_controller.dart';
+import 'data_access/cache/petroplus_storages.dart';
 
 void main() async {
+  await Hive.initFlutter();
+  await inicializarStorage(petroplus_storages);
+
   WidgetsFlutterBinding.ensureInitialized();
   if (!kIsWeb) {
     await Firebase.initializeApp();

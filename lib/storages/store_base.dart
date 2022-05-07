@@ -75,7 +75,5 @@ abstract class StoreBase<E extends StorageEntity> {
 
   String get hiveBoxName;
 
-  bool get isCriticalInformation;
-
   List<StoreAdapter> get adapters;
 }
