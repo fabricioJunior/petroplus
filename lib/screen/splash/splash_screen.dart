@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../pages/index.dart';
-import '../../pages/vehicle_data_pages/vehicle_data_false/vehicle_data_false.dart';
 
 class SplachScreen extends StatefulWidget {
   const SplachScreen({Key? key}) : super(key: key);

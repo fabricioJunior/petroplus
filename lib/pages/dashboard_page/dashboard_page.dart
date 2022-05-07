@@ -7,7 +7,7 @@ import '../../widgets/vehicle_history_table_widget.dart';
 import '../drawer_menu.dart/navigation_drawer_menu.dart';
 
 class DashboardPage extends StatelessWidget {
-  DashboardPage({Key? key}) : super(key: key);
+  const DashboardPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

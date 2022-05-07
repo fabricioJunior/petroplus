@@ -6,7 +6,9 @@ class LoginRepository {
   Future<bool> doLogin(AuthUser authUser) async {
     try {
       final userAuth = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: authUser.email, password: authUser.password);
+        email: authUser.email,
+        password: authUser.password,
+      );
 
       final tokenUser = await userAuth.user?.getIdToken();
 
