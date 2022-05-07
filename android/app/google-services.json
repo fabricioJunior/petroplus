@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "558302509436",
+    "project_id": "petroplay-stp",
+    "storage_bucket": "petroplay-stp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558302509436:android:2b416a51c681e6871d4cf9",
+        "android_client_info": {
+          "package_name": "com.example.petroplus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "558302509436-vrtb6n4coutof2dtd302js6mmuht4ftq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCciHgMHetlKGecVVVtIM1z12h6d9sGHso"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "558302509436-vrtb6n4coutof2dtd302js6mmuht4ftq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
