@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../widgets/vehicle_history_table_widget.dart';
 import '../../dashboard_page/controles/state_todo.dart';
 import '../../dashboard_page/controles/todo_controler.dart';
+import 'vehicle_details_dialog.dart';
 
 //String inspecionar = "inspecionar";
 //String inspecionar = "Aguardando";
@@ -127,16 +128,17 @@ class chelistReceptionVehiclesTableTablet extends StatelessWidget {
   }
 }
 
-class chelistReceptionVehiclesTableMobile extends StatefulWidget {
-  chelistReceptionVehiclesTableMobile({Key? key}) : super(key: key);
+class ChelistReceptionVehiclesTableMobile extends StatefulWidget {
+  final bool isAuditPage;
+  const ChelistReceptionVehiclesTableMobile({Key? key, this.isAuditPage = false}) : super(key: key);
 
   @override
-  State<chelistReceptionVehiclesTableMobile> createState() =>
-      _chelistReceptionVehiclesTableMobileState();
+  State<ChelistReceptionVehiclesTableMobile> createState() =>
+      _ChelistReceptionVehiclesTableMobileState();
 }
 
-class _chelistReceptionVehiclesTableMobileState
-    extends State<chelistReceptionVehiclesTableMobile> {
+class _ChelistReceptionVehiclesTableMobileState
+    extends State<ChelistReceptionVehiclesTableMobile> {
   //Para iniciar antes de buildar a tela
   final TodoControler todocontrole = TodoControler();
 
@@ -155,7 +157,7 @@ class _chelistReceptionVehiclesTableMobileState
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: const [
               Flexible(
                 flex: 4,
                 child: Center(
@@ -261,14 +263,19 @@ class _chelistReceptionVehiclesTableMobileState
                                   Container(
                                     height: 5,
                                   ),
-                                  ConteudoVeiculoDashboard(
-                                    placaVeiculo: (state.todoSuccess[indice]
-                                            .license_plate ??
-                                        ""),
-                                    modeloVeiculo: (state
-                                        .todoSuccess[indice].customer_name),
-                                    dataVeiculo:
-                                        (state.todoSuccess[indice].status),
+                                  InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context, 
+                                        useRootNavigator: true,
+                                        builder: (_) => VehicleDetailsDialog(isAuditPage: widget.isAuditPage),
+                                      );
+                                    },
+                                    child: ConteudoVeiculoDashboard(
+                                      placaVeiculo: (state.todoSuccess[indice].license_plate ?? ""),
+                                      modeloVeiculo: (state.todoSuccess[indice].customer_name),
+                                      dataVeiculo: (state.todoSuccess[indice].status),
+                                    ),
                                   ),
                                   Container(
                                     height: 5,
