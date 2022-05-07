@@ -184,10 +184,11 @@ class AddPassenger extends StatelessWidget {
                                 primary: Color.fromARGB(255, 255, 81, 0),
                               ),
                               onPressed: () async {
-                                var order = await context
-                                    .read<OrdersRepository>()
-                                    .orderByLincesePlate(
-                                        analisePlacaInterno.text);
+                                var order = await OrdersRepository(
+                                  OrdersClient(client()),
+                                  OrdersStore(),
+                                ).orderByLincesePlate(analisePlacaInterno.text);
+
                                 if (order != null) {
                                   Navigator.push(
                                     context,
@@ -198,8 +199,8 @@ class AddPassenger extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            VehicleDataFalse()),
+                                      builder: (context) => VehicleDataFalse(),
+                                    ),
                                   );
                                 }
                               },
@@ -227,7 +228,8 @@ class AddPassenger extends StatelessWidget {
                                 var order = await context
                                     .read<OrdersRepository>()
                                     .orderByLincesePlate(
-                                        analisePlacaInterno.text);
+                                      analisePlacaInterno.text,
+                                    );
                                 if (order != null) {
                                   Navigator.push(
                                     context,
@@ -238,8 +240,8 @@ class AddPassenger extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            VehicleDataFalse()),
+                                      builder: (context) => VehicleDataFalse(),
+                                    ),
                                   );
                                 }
                                 // addPassagerBloc.add(

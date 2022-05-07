@@ -13,7 +13,7 @@ class OrdersClient {
       'orders?status[]=AAPR&status[]=DLVD&status[]=INSP&status[]=IPGR&status[]=PAID&status[]=PEND&status[]=QUTD&status[]=RFCO&status[]=AWAT',
     );
     handleError(response);
-    return _montarObjeto(jsonDecode(response.data));
+    return _montarObjeto(response.data);
   }
 
   void handleError(Response response) {

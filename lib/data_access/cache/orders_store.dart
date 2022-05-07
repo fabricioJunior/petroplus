@@ -14,7 +14,7 @@ class OrdersStore extends StoreBase<Order> {
   String get hiveBoxName => HiveBoxNames.ordersBox;
 
   @override
-  int key(Order object) {
+  String key(Order object) {
     return object.id;
   }
 }

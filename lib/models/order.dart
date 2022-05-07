@@ -4,7 +4,7 @@ import 'package:petroplus/storages/storage_entity.dart';
 class Order extends Equatable with StorageEntity {
   final DateTime createdAt;
   final DateTime updateAt;
-  final int id;
+  final String id;
   final String licensePlate;
 
   const Order(
@@ -16,9 +16,9 @@ class Order extends Equatable with StorageEntity {
 
   Order.fromJson(Map<String, dynamic> json)
       : createdAt = DateTime.parse(json['created_at']),
-        updateAt = DateTime.parse(json['update_at']),
+        updateAt = DateTime.parse(json['updated_at']),
         id = json['id'],
-        licensePlate = json['licensePlate'];
+        licensePlate = json['license_plate'] ?? '';
 
   Order.fromStorage(Map<String, dynamic> props)
       : createdAt = props['createdAt'],
