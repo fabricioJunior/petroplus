@@ -43,7 +43,7 @@ class DeliveryAuditPage extends StatelessWidget {
                         if (!isTablet) ...[
                           // ------------------------------------------------Checklists de Recepção
                           DeliveryAuditPageMobile(),
-                          chelistReceptionVehiclesTableMobile(),
+                          ChelistReceptionVehiclesTableMobile(isAuditPage: true),
                         ],
 // ------------------------------------------------
                       ],

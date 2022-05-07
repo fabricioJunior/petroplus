@@ -278,7 +278,7 @@ class _IncomingAppointmentsMobileState
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: const [
                             Text(
                               'Agendamentos de entrada',
                               style: TextStyle(
@@ -302,7 +302,7 @@ class _IncomingAppointmentsMobileState
                         Column(
                           children: [
                             Row(
-                              children: [
+                              children: const [
                                 Icon(
                                   Icons.autorenew_outlined,
                                   color: Color.fromARGB(255, 73, 73, 73),
@@ -331,7 +331,7 @@ class _IncomingAppointmentsMobileState
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
+                          children: const [
                             Flexible(
                               flex: 3,
                               child: Center(
@@ -490,7 +490,7 @@ class ConteudoVeiculoDashboard extends StatelessWidget {
                 // width: 70,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('img/placa.png'),
+                    image: AssetImage('assets/img/placa.png'),
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -597,7 +597,7 @@ class ConteudoVeiculoCheclist extends StatelessWidget {
                 // width: 70,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('img/placa.png'),
+                    image: AssetImage('assets/img/placa.png'),
                     fit: BoxFit.contain,
                   ),
                 ),
