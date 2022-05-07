@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:petroplus/models/orders_list.dart';
+import 'package:petroplus/models/vehicle_model.dart';
 
 class OrdersClient {
   final Dio client;
@@ -16,6 +15,27 @@ class OrdersClient {
     return _montarObjeto(response.data);
   }
 
+  Future<VehicleModel> getVehicleByLicensePlate(String licensePlate) async {
+    Response response = await client.get(
+      'customer_licenses/byLicensePlate/$licensePlate',
+    );
+    handleError(response);
+    return _montarVehicle(response.data);
+  }
+
+  Future<bool> post(Map<String, dynamic> data) async {
+    try {
+      Response response = await client.post(
+        'orders/?status=AWAT&page=1&limit=10',
+        data: data,
+      );
+      handleError(response);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   void handleError(Response response) {
     if (response.statusCode != 200) {
       throw Exception('Erro na requisição ${response.realUri}');
@@ -24,5 +44,9 @@ class OrdersClient {
 
   OrdersList _montarObjeto(Map<String, dynamic> json) {
     return OrdersList.fromJson(json);
+  }
+
+  VehicleModel _montarVehicle(Map<String, dynamic> json) {
+    return VehicleModel.fromJson(json);
   }
 }

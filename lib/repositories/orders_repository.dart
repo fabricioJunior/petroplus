@@ -2,6 +2,7 @@ import 'package:petroplus/data_access/cache/orders_store.dart';
 import 'package:petroplus/data_access/clients/orders_client.dart';
 import 'package:petroplus/models/order.dart';
 import 'package:petroplus/models/orders_list.dart';
+import 'package:petroplus/models/vehicle_model.dart';
 
 class OrdersRepository {
   final OrdersClient ordersClient;
@@ -27,5 +28,13 @@ class OrdersRepository {
     }
 
     return (await ordersClient.getAll()).getByLiscencePlate(licensePlate);
+  }
+
+  Future<VehicleModel> getVehicleByLicensePlate(String licensePlate) async {
+    return await ordersClient.getVehicleByLicensePlate(licensePlate);
+  }
+
+  Future<bool> saveOrder(VehicleModel model) async {
+    return await ordersClient.post(model.toJsonPost());
   }
 }

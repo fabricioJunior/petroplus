@@ -1,16 +1,33 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:petroplus/pages/vehicle_data_pages/vehicle_data_true/vehicle_data_true.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:petroplus/autenticacao/http_interceptos.dart';
+import 'package:petroplus/pages/vehicle_data_pages/vehicle_data_true/vehicle_data_true.dart';
+
+import '../../../blocs/add_order_bloc/add_order_bloc.dart';
+import '../../../data_access/cache/orders_store.dart';
+import '../../../data_access/clients/orders_client.dart';
+import '../../../repositories/orders_repository.dart';
 import '../../../widgets/appbar_uni_widget.dart';
 import '../../add_passenger/add_passenger_page.dart';
 import '../../drawer_menu.dart/navigation_drawer_menu.dart';
-import 'package:http/http.dart' as http;
 
 // class AnaliseVeiculoRotaMap {}
 
+final _addOrderBloc = AddOrderBloc(OrdersRepository(OrdersClient(client()), OrdersStore()));
+late String _licensePlate;
 class VehicleDataFalse extends StatefulWidget {
-  VehicleDataFalse({Key? key}) : super(key: key);
+  final String licensePlate;
+
+  VehicleDataFalse({
+    Key? key,
+    required this.licensePlate,
+  }) : super(key: key) {
+    _licensePlate = licensePlate;
+  }
 
   @override
   State<VehicleDataFalse> createState() => _VehicleDataFalseState();
@@ -174,6 +191,7 @@ class BarraHistoricoVeiculo extends StatelessWidget {
   String? emailClienteTrue;
   String? contatoClienteTrue;
   String? statusClienteTrue;
+
 
   @override
   Widget build(BuildContext context) {
@@ -342,7 +360,8 @@ class BarraHistoricoVeiculo extends StatelessWidget {
                       // textStyle: TextStyle(
                       //     fontSize: 30, fontWeight: FontWeight.bold),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                    },
                     child: Text(
                       "Model3",
                       style: TextStyle(
@@ -832,48 +851,7 @@ class FormularioDeEntradaPostVEiculo extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 primary: Color.fromARGB(255, 255, 81, 0),
                               ),
-                              onPressed: () {
-                                Future<dynamic> loadProducts222() async {
-                                  final preferences2 =
-                                      await SharedPreferences.getInstance();
-                                  final token = preferences2.getString("token");
-
-                                  final response = await http.post(
-                                    Uri.parse(
-                                      "https://petroplus-api-dev.herokuapp.com/v1/orders/?status=AWAT&page=1&limit=10",
-                                    ),
-                                    body: jsonEncode(
-                                      // Map<String, dynamic> data = jsonDecode(response.body);
-                                      // Map controleLoop = data["items"];
-                                      {
-                                        "customerId": null,
-                                        "customerVehicleId":
-                                            "b6fa86c1-9fac-4098-966f-b21276c066c8",
-                                        "customerName":
-                                            "Hallan testando Retorno",
-                                        "customerDocument": "12345678/100",
-                                        "phoneNumber": "85986396225",
-                                        "email": "teste5555@gmail.com",
-                                        "vehicleMakerId": 2,
-                                        "vehicleModelId": 2,
-                                        "vehicleYear": "2021-1",
-                                        "vehicleColor": "Branco",
-                                        "clientId":
-                                            "936be4b1-a1e6-43d2-a207-788e7f16fb34",
-                                        "licensePlate": "HAS5555",
-                                        "mileage": "5000"
-                                      },
-                                    ),
-                                    headers: {
-                                      'Content-Type': 'application/json',
-                                      'Accept': 'application/json',
-                                      'Authorization': 'Bearer $token',
-                                    },
-                                  );
-                                }
-
-                                loadProducts222();
-                              },
+                              onPressed: () => _addOrderBloc.add(AddOrderCheckedOrderByLicensePlate(_licensePlate)),
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(24, 11, 24, 11),
                                 child: Text(

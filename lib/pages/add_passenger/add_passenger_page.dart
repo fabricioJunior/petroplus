@@ -84,7 +84,7 @@ class AddPassenger extends StatelessWidget {
         } else {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => VehicleDataFalse()),
+            MaterialPageRoute(builder: (context) => VehicleDataFalse(licensePlate: analisePlacaInterno.text)),
           );
         }
       },
@@ -199,7 +199,7 @@ class AddPassenger extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => VehicleDataFalse(),
+                                      builder: (context) => VehicleDataFalse(licensePlate: analisePlacaInterno.text),
                                     ),
                                   );
                                 }
@@ -240,7 +240,7 @@ class AddPassenger extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => VehicleDataFalse(),
+                                      builder: (context) => VehicleDataFalse(licensePlate: analisePlacaInterno.text),
                                     ),
                                   );
                                 }
