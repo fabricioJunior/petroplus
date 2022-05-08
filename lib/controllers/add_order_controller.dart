@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:petroplus/models/order_model.dart';
 
 import '../alerts/alerts.dart';
@@ -44,6 +46,7 @@ class AddOrderController {
         licensePlate: placa,
         mileage: quilometragem,
       );
+      log(newOrder.toString());
       await _orderRepository.saveOrder(newOrder.toJson());
       return true;
     } on HttpClientException catch (e) {
