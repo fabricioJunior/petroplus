@@ -1,7 +1,8 @@
 ﻿import 'package:hive/hive.dart';
-import 'package:petroplus/storages/storage_entity.dart';
-import 'package:petroplus/storages/store_adapter.dart';
-import 'package:petroplus/storages/utils.dart';
+
+import 'storage_entity.dart';
+import 'store_adapter.dart';
+import 'utils.dart';
 
 abstract class StoreBase<E extends StorageEntity> {
   Future<void> save(List<E> objetos) async {
