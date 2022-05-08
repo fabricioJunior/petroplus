@@ -22,8 +22,8 @@ class _SplachState extends State<Splach> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return FinalizeBudgetPage();
-            //return HomeSplash();
+            // return FinalizeBudgetPage();
+            return HomeSplash();
           },
         ),
         (route) => false,
