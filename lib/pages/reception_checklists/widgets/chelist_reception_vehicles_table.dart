@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../../service_locator.dart';
 
 import '../../../widgets/vehicle_history_table_widget.dart';
-import '../../dashboard_page/controles/state_todo.dart';
-import '../../dashboard_page/controles/todo_controler.dart';
+import '../../dashboard_page/controles/x_order_state.dart';
+import '../../../controllers/x_order/x_order_controler.dart';
 import 'vehicle_details_dialog.dart';
 
 //String inspecionar = "inspecionar";
@@ -140,13 +141,12 @@ class ChelistReceptionVehiclesTableMobile extends StatefulWidget {
 class _ChelistReceptionVehiclesTableMobileState
     extends State<ChelistReceptionVehiclesTableMobile> {
   //Para iniciar antes de buildar a tela
-  final TodoControler todocontrole = TodoControler();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    todocontrole.getTodos();
+    locator.get<XOrderController>().getXOrders();
   }
 
   @override
@@ -248,7 +248,7 @@ class _ChelistReceptionVehiclesTableMobileState
                   color: Color.fromARGB(255, 255, 255, 255),
                   // --------------------Inicio Loop Back
                   child: ValueListenableBuilder<StateTodo>(
-                    valueListenable: todocontrole,
+                    valueListenable: locator.get<XOrderController>(),
                     builder: (context, value, _) {
                       final state = value;
                       if (state is StateTodoLoading) {

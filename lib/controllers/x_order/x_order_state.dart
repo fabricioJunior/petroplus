@@ -1,4 +1,4 @@
-import 'package:petroplus/pages/dashboard_page/controles/todo_model.dart';
+import '../../models/x_order_model.dart';
 
 abstract class StateTodo {}
 
@@ -7,7 +7,7 @@ class StateTodoStart implements StateTodo {}
 class StateTodoLoading implements StateTodo {}
 
 class StateTodoSuccess implements StateTodo {
-  final List<TodoModel> todoSuccess;
+  final List<XOrderModel> todoSuccess;
 
   StateTodoSuccess(this.todoSuccess);
 }
@@ -17,5 +17,3 @@ class StateTodoError implements StateTodo {
 
   StateTodoError(this.todoError);
 }
-
-// padrão state

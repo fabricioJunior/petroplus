@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:petroplus/repositories/orders_repository.dart';
+import '../../repositories/order_repository.dart';
+import '../../service_locator.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../autenticacao/http_interceptos.dart';
 import '../../blocs/add_passager_bloc/add_passager_bloc.dart';
-import '../../data_access/cache/orders_store.dart';
-import '../../data_access/clients/orders_client.dart';
-import '../dashboard_page/dashboard_page.dart';
 import '../drawer_menu.dart/navigation_drawer_menu.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -54,13 +51,6 @@ class AnaliseVeiculoRota {
   }
 }
 
-AddPassagerBloc addPassagerBloc = AddPassagerBloc(
-  OrdersRepository(
-    OrdersClient(client()),
-    OrdersStore(),
-  ),
-);
-
 class AddPassenger extends StatelessWidget {
   AddPassenger({Key? key}) : super(key: key);
 
@@ -70,8 +60,8 @@ class AddPassenger extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AddPassagerBloc, AddPassagerState>(
-      bloc: addPassagerBloc,
+    return BlocListener<AddPassangerBloc, AddPassagerState>(
+      bloc: locator.get<AddPassangerBloc>(),
       listenWhen: (previous, current) =>
           current is AddPassagerCheckOrderByLicensePlateSucess,
       listener: (context, state) {
@@ -184,16 +174,12 @@ class AddPassenger extends StatelessWidget {
                                 primary: Color.fromARGB(255, 255, 81, 0),
                               ),
                               onPressed: () async {
-                                var order = await OrdersRepository(
-                                  OrdersClient(client()),
-                                  OrdersStore(),
-                                ).orderByLincesePlate(analisePlacaInterno.text);
+                                var order = await locator.get<OrderRepository>().getOrderByLicensePlate(analisePlacaInterno.text);
 
                                 if (order != null) {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(
-                                        builder: (context) => VehicleData()),
+                                    MaterialPageRoute(builder: (context) => VehicleData()),
                                   );
                                 } else {
                                   Navigator.push(
@@ -225,11 +211,9 @@ class AddPassenger extends StatelessWidget {
                                 primary: Color.fromARGB(255, 255, 255, 255),
                               ),
                               onPressed: () async {
-                                var order = await context
-                                    .read<OrdersRepository>()
-                                    .orderByLincesePlate(
-                                      analisePlacaInterno.text,
-                                    );
+                                var order = await locator.get<OrderRepository>().getOrderByLicensePlate(
+                                  analisePlacaInterno.text,
+                                );
                                 if (order != null) {
                                   Navigator.push(
                                     context,

@@ -1,6 +1,6 @@
-import 'package:petroplus/models/order.dart';
+import '../../models/order_model.dart';
 
 // ignore: non_constant_identifier_names
 Map<Type, int> PETROPLUS_STORAGES = {
-  Order: 0,
+  OrderModel: 0,
 };
