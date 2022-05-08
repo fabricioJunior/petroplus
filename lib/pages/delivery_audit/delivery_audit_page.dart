@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:petroplus/pages/dashboard_page/widgets/dashboard_responsive_widgets.dart';
-import 'package:petroplus/pages/dashboard_page/widgets/visao_geral_esta_semana_widgets.dart';
-import 'package:petroplus/pages/dashboard_page/widgets/widgets_analysis_all_widget.dart';
-import 'package:petroplus/pages/delivery_audit/widgets/delivery_audit_page_widget.dart';
-import 'package:petroplus/pages/reception_checklists/widgets/chelist_reception_vehicles_table.dart';
-import 'package:petroplus/pages/reception_checklists/widgets/divschelist_reception_vehicles_table.dart';
-import 'package:petroplus/pages/reception_checklists/widgets/inspection_service_tablet_widget.dart';
-import 'package:petroplus/pages/reception_checklists/widgets/reception_checklists_widgets.dart';
+import '../dashboard_page/widgets/dashboard_responsive_widgets.dart';
+import '../dashboard_page/widgets/visao_geral_esta_semana_widgets.dart';
+import '../dashboard_page/widgets/widgets_analysis_all_widget.dart';
+import 'widgets/delivery_audit_page_widget.dart';
+import '../reception_checklists/widgets/chelist_reception_vehicles_table.dart';
+import '../reception_checklists/widgets/divschelist_reception_vehicles_table.dart';
+import '../reception_checklists/widgets/inspection_service_tablet_widget.dart';
+import '../reception_checklists/widgets/reception_checklists_widgets.dart';
 import '../../widgets/appbar_uni_widget.dart';
 import '../../widgets/vehicle_history_table_widget.dart';
 import '../drawer_menu.dart/navigation_drawer_menu.dart';
@@ -43,7 +43,7 @@ class DeliveryAuditPage extends StatelessWidget {
                         if (!isTablet) ...[
                           // ------------------------------------------------Checklists de Recepção
                           DeliveryAuditPageMobile(),
-                          chelistReceptionVehiclesTableMobile(),
+                          ChelistReceptionVehiclesTableMobile(isAuditPage: true),
                         ],
 // ------------------------------------------------
                       ],

@@ -23,7 +23,7 @@ class NavigationDrawerPagina extends StatelessWidget {
               height: 30,
             ),
             Image.asset(
-              'img/logobrancamenos.png',
+              'assets/img/logobrancamenos.png',
               fit: BoxFit.contain,
               height: 38,
             ),

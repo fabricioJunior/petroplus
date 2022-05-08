@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../add_passenger/add_passenger_page.dart';
-import '../../appbar_message_alert_page/navigation_drawer_menu.dart';
 
 get selectedGender => null;
 
@@ -128,11 +127,6 @@ class ReceptionChecklistsMobile extends StatelessWidget {
                             builder: (context) => AddPassenger(),
                           ),
                         );
-                        // ScaffoldMessenger.of(context).showSnackBar(
-                        //   SnackBar(
-                        //     content: Text("Deslogado com sucesso!"),
-                        //   ),
-                        // );
                       },
                       child: Text(
                         "Adicionar Passante",

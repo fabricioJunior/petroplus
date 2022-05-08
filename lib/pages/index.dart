@@ -1,12 +1,15 @@
-import 'package:dio/dio.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:petroplus/http/user.dart';
+import '../alerts/alerts.dart';
+import '../models/auth_user_model.dart';
+import '../repositories/login_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../http/login_repisitory.dart';
+import '../service_locator.dart';
 import 'dashboard_page/dashboard_page.dart';
 
 class HomeSplash extends StatefulWidget {
-  HomeSplash({Key? key}) : super(key: key);
+  const HomeSplash({Key? key}) : super(key: key);
 
   @override
   State<HomeSplash> createState() => _HomeSplashState();
@@ -19,30 +22,10 @@ class _HomeSplashState extends State<HomeSplash> {
   //   'password': '',
   // };
 
-  TextEditingController _emailImputController = TextEditingController();
-  TextEditingController _senhaImputController = TextEditingController();
+  final TextEditingController _emailImputController = TextEditingController();
+  final TextEditingController _senhaImputController = TextEditingController();
 
-  bool _isLoanding = false;
-
-  // void _submit() {
-  //   final isValid = _formKey.currentState?.validate() ?? false;
-
-  //   if (!isValid) {
-  //     return;
-  //   }
-
-  //   setState(() => _isLoanding = true);
-
-  //   _formKey.currentState?.save();
-
-  //   // if (_isLogin()) {
-  //   //   //Login
-  //   // } else {
-  //   //   //Register
-  //   // }
-
-  //   setState(() => _isLoanding = false);
-  // }
+  var _isLoanding = false;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +51,7 @@ class _HomeSplashState extends State<HomeSplash> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 // Logo
-                Container(
+                SizedBox(
                   width: 270,
                   child: Image.asset('img/logo.png'),
                 ),
@@ -77,7 +60,7 @@ class _HomeSplashState extends State<HomeSplash> {
                   height: 50,
                 ),
 // ------------------------------------------------Entrar
-                Container(
+                SizedBox(
                   width: 280,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,7 +77,7 @@ class _HomeSplashState extends State<HomeSplash> {
                   ),
                 ),
 // ------------------------------------------------Espaço
-                Container(
+                SizedBox(
                   height: 10,
                 ),
 // ------------------------------------------------Input
@@ -185,24 +168,13 @@ class _HomeSplashState extends State<HomeSplash> {
                                 ),
                               ),
                             ),
-                            if (_isLoanding)
-                              CircularProgressIndicator()
+                            if (_isLoanding) CircularProgressIndicator()
                             else
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   primary: Color.fromARGB(255, 255, 81, 0),
                                 ),
-                                onPressed: _doSignIn,
-                                //  onPressed: _submit,
-                                //() {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) => DashboardPage()),
-                                // );
-                                // _formKey.currentState?.validate();
-
-                                //},
+                                onPressed: _login,
                                 child: const Padding(
                                   padding: EdgeInsets.fromLTRB(24, 11, 24, 11),
                                   child: Text(
@@ -228,35 +200,29 @@ class _HomeSplashState extends State<HomeSplash> {
     );
   }
 
-  final repositorio = LoginRepository();
 
-  void _doSignIn() async {
-    final savedToken = await repositorio.doLogin(AuthUser(
-        email: _emailImputController.text,
-        password: _senhaImputController.text));
+  void _login() async {
+    
+    final savedToken = await locator.get<LoginRepository>().login(AuthUserModel(
+      email: _emailImputController.text,
+      password: _senhaImputController.text),
+    );
 
     final preferences = await SharedPreferences.getInstance();
     final token = preferences.getString("token");
 
-    print(token);
-
-    // final dio = Dio();
-    // final response = await dio.get(
-    //     "https://petroplus-api-dev.herokuapp.com/v1/vehicles/makers",
-    //     options: Options(headers: {"Authorization": token}));
-    // print(response.data);
+    log(token ?? '', error: 'TOKEN INVÁLIDO');
 
     if (savedToken) {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) {
-        return DashboardPage();
-      }));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Login Inválido!"),
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) {
+            return DashboardPage();
+          },
         ),
       );
+    } else {
+      showAlert("Login Inválido!", isError: true);
     }
   }
 }

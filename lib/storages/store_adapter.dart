@@ -1,5 +1,6 @@
 ﻿import 'package:hive/hive.dart' as hive;
-import 'package:petroplus/storages/storage_entity.dart';
+
+import 'storage_entity.dart';
 import 'storages_controller.dart' as s;
 import 'utils.dart';
 

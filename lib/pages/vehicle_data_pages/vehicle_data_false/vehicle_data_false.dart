@@ -1,16 +1,30 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:petroplus/pages/vehicle_data_pages/vehicle_data_true/vehicle_data_true.dart';
+import 'package:http/http.dart' as http;
+import '../../../controllers/add_order_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../vehicle_data_true/vehicle_data_true.dart';
+
+import '../../../service_locator.dart';
 import '../../../widgets/appbar_uni_widget.dart';
 import '../../add_passenger/add_passenger_page.dart';
 import '../../drawer_menu.dart/navigation_drawer_menu.dart';
-import 'package:http/http.dart' as http;
 
 // class AnaliseVeiculoRotaMap {}
 
+late String _licensePlate;
+
 class VehicleDataFalse extends StatefulWidget {
-  VehicleDataFalse({Key? key}) : super(key: key);
+  final String licensePlate;
+
+  VehicleDataFalse({
+    Key? key,
+    required this.licensePlate,
+  }) : super(key: key) {
+    _licensePlate = licensePlate;
+  }
 
   @override
   State<VehicleDataFalse> createState() => _VehicleDataFalseState();
@@ -127,7 +141,7 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
                             emailClienteTrue: _emailVehicleDataTrue,
                             modeloClienteTrue: _modeloVehicleDataTrue,
                             nomeClienteTrue: _nomeVehicleDataTrue,
-                            placaClienteTrue: _placaVehicleDataTrue,
+                            placaClienteTrue: widget.licensePlate,
                             statusClienteTrue: _statusVehicleDataTrue,
                           ),
                           Container(
@@ -135,7 +149,7 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
                             height: 1,
                             color: Color.fromARGB(34, 107, 107, 107),
                           ),
-                          FormularioDeEntradaPostVEiculo(),
+                          FormularioDeEntradaPostVeiculo(),
                         ],
 // ------------------------------------------------Body/Mobile
                         if (!isTablet) ...[
@@ -363,11 +377,21 @@ class BarraHistoricoVeiculo extends StatelessWidget {
   }
 }
 
-class FormularioDeEntradaPostVEiculo extends StatelessWidget {
-  FormularioDeEntradaPostVEiculo({Key? key}) : super(key: key);
-  final preferences = SharedPreferences.getInstance();
+final TextEditingController nomeCompletoController = TextEditingController();
+final TextEditingController cpfController = TextEditingController();
+final TextEditingController celularController = TextEditingController();
+final TextEditingController emailController = TextEditingController();
 
-  // int trueControllerFalse = 0;
+final TextEditingController marcaTextController = TextEditingController();
+final TextEditingController anoTextController = TextEditingController();
+final TextEditingController modeloTextController = TextEditingController();
+final TextEditingController corTextController = TextEditingController();
+final TextEditingController kilometragemTextController =
+    TextEditingController();
+
+class FormularioDeEntradaPostVeiculo extends StatelessWidget {
+  FormularioDeEntradaPostVeiculo({Key? key}) : super(key: key);
+  final preferences = SharedPreferences.getInstance();
 
   @override
   Widget build(BuildContext context) {
@@ -415,49 +439,7 @@ class FormularioDeEntradaPostVEiculo extends StatelessWidget {
                                       color: Color.fromARGB(255, 0, 0, 0),
                                     ),
                                   ),
-                                  TextFormField(
-                                      // autovalidateMode:
-                                      //     AutovalidateMode.onUserInteraction,
-                                      // controller: trueControllerFalse,
-                                      //onSaved: (email) => _authData['email'] = email ?? '',
-                                      // style: const TextStyle(
-                                      //   fontSize: 12,
-                                      // ),
-                                      // validator: (_email) {
-                                      //   final email = _email ?? '';
-                                      //   if (email.trim().isEmpty ||
-                                      //       !email.contains('@')) {
-                                      //     return "Email Obrigatório";
-                                      //   }
-                                      //   return null;
-                                      // },
-                                      ),
-                                  Text(
-                                    "Modelo",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    // controller: _emailImputController,
-                                    //onSaved: (email) => _authData['email'] = email ?? '',
-                                    // style: const TextStyle(
-                                    //   fontSize: 12,
-                                    // ),
-                                    // validator: (_email) {
-                                    //   final email = _email ?? '';
-                                    //   if (email.trim().isEmpty ||
-                                    //       !email.contains('@')) {
-                                    //     return "Email Obrigatório";
-                                    //   }
-                                    //   return null;
-                                    // },
-                                  ),
+                                  _marcaTextFormField(),
                                   Text(
                                     "Ano",
                                     style: TextStyle(
@@ -467,49 +449,7 @@ class FormularioDeEntradaPostVEiculo extends StatelessWidget {
                                       color: Color.fromARGB(255, 0, 0, 0),
                                     ),
                                   ),
-                                  TextFormField(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    // controller: _emailImputController,
-                                    //onSaved: (email) => _authData['email'] = email ?? '',
-                                    // style: const TextStyle(
-                                    //   fontSize: 12,
-                                    // ),
-                                    // validator: (_email) {
-                                    //   final email = _email ?? '';
-                                    //   if (email.trim().isEmpty ||
-                                    //       !email.contains('@')) {
-                                    //     return "Email Obrigatório";
-                                    //   }
-                                    //   return null;
-                                    // },
-                                  ),
-                                  Text(
-                                    "Placa (APAGAR DEPOIS)",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    // controller: _emailImputController,
-                                    //onSaved: (email) => _authData['email'] = email ?? '',
-                                    // style: const TextStyle(
-                                    //   fontSize: 12,
-                                    // ),
-                                    // validator: (_email) {
-                                    //   final email = _email ?? '';
-                                    //   if (email.trim().isEmpty ||
-                                    //       !email.contains('@')) {
-                                    //     return "Email Obrigatório";
-                                    //   }
-                                    //   return null;
-                                    // },
-                                  ),
+                                  _anoTextFormField(),
                                 ],
                               ),
                             ),
@@ -543,23 +483,7 @@ class FormularioDeEntradaPostVEiculo extends StatelessWidget {
                                       color: Color.fromARGB(255, 0, 0, 0),
                                     ),
                                   ),
-                                  TextFormField(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    // controller: _emailImputController,
-                                    //onSaved: (email) => _authData['email'] = email ?? '',
-                                    // style: const TextStyle(
-                                    //   fontSize: 12,
-                                    // ),
-                                    // validator: (_email) {
-                                    //   final email = _email ?? '';
-                                    //   if (email.trim().isEmpty ||
-                                    //       !email.contains('@')) {
-                                    //     return "Email Obrigatório";
-                                    //   }
-                                    //   return null;
-                                    // },
-                                  ),
+                                  _modeloTextFormField(),
                                   Text(
                                     "Cor",
                                     style: TextStyle(
@@ -569,23 +493,7 @@ class FormularioDeEntradaPostVEiculo extends StatelessWidget {
                                       color: Color.fromARGB(255, 0, 0, 0),
                                     ),
                                   ),
-                                  TextFormField(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    // controller: _emailImputController,
-                                    //onSaved: (email) => _authData['email'] = email ?? '',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                    ),
-                                    // validator: (_email) {
-                                    //   final email = _email ?? '';
-                                    //   if (email.trim().isEmpty ||
-                                    //       !email.contains('@')) {
-                                    //     return "Email Obrigatório";
-                                    //   }
-                                    //   return null;
-                                    // },
-                                  ),
+                                  _corTextFormField(),
                                   Text(
                                     "Kilometragem",
                                     style: TextStyle(
@@ -595,23 +503,7 @@ class FormularioDeEntradaPostVEiculo extends StatelessWidget {
                                       color: Color.fromARGB(255, 0, 0, 0),
                                     ),
                                   ),
-                                  TextFormField(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    // controller: _emailImputController,
-                                    //onSaved: (email) => _authData['email'] = email ?? '',
-                                    // style: const TextStyle(
-                                    //   fontSize: 12,
-                                    // ),
-                                    // validator: (_email) {
-                                    //   final email = _email ?? '';
-                                    //   if (email.trim().isEmpty ||
-                                    //       !email.contains('@')) {
-                                    //     return "Email Obrigatório";
-                                    //   }
-                                    //   return null;
-                                    // },
-                                  ),
+                                  _kilometragemTextFormField(),
                                 ],
                               ),
                             ),
@@ -624,171 +516,7 @@ class FormularioDeEntradaPostVEiculo extends StatelessWidget {
                 Container(
                   height: 40,
                 ),
-                Container(
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Flexible(
-                            flex: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Dados do Cliente",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 30,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    "Nome Completo",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    // controller: _emailImputController,
-                                    //onSaved: (email) => _authData['email'] = email ?? '',
-                                    // style: const TextStyle(
-                                    //   fontSize: 12,
-                                    // ),
-                                    // validator: (_email) {
-                                    //   final email = _email ?? '';
-                                    //   if (email.trim().isEmpty ||
-                                    //       !email.contains('@')) {
-                                    //     return "Email Obrigatório";
-                                    //   }
-                                    //   return null;
-                                    // },
-                                  ),
-                                  Text(
-                                    "Celular",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    // controller: _emailImputController,
-                                    //onSaved: (email) => _authData['email'] = email ?? '',
-                                    // style: const TextStyle(
-                                    //   fontSize: 12,
-                                    // ),
-                                    // validator: (_email) {
-                                    //   final email = _email ?? '';
-                                    //   if (email.trim().isEmpty ||
-                                    //       !email.contains('@')) {
-                                    //     return "Email Obrigatório";
-                                    //   }
-                                    //   return null;
-                                    // },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 30,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    "CPF/CNPJ",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    // controller: _emailImputController,
-                                    //onSaved: (email) => _authData['email'] = email ?? '',
-                                    // style: const TextStyle(
-                                    //   fontSize: 12,
-                                    // ),
-                                    // validator: (_email) {
-                                    //   final email = _email ?? '';
-                                    //   if (email.trim().isEmpty ||
-                                    //       !email.contains('@')) {
-                                    //     return "Email Obrigatório";
-                                    //   }
-                                    //   return null;
-                                    // },
-                                  ),
-                                  Text(
-                                    "e-Mail",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                  ),
-                                  TextFormField(
-                                    autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
-                                    // controller: _emailImputController,
-                                    //onSaved: (email) => _authData['email'] = email ?? '',
-                                    // style: const TextStyle(
-                                    //   fontSize: 12,
-                                    // ),
-                                    // validator: (_email) {
-                                    //   final email = _email ?? '';
-                                    //   if (email.trim().isEmpty ||
-                                    //       !email.contains('@')) {
-                                    //     return "Email Obrigatório";
-                                    //   }
-                                    //   return null;
-                                    // },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                _DadosDoCliente(),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 50, 0, 50),
                   child: Row(
@@ -832,47 +560,26 @@ class FormularioDeEntradaPostVEiculo extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 primary: Color.fromARGB(255, 255, 81, 0),
                               ),
-                              onPressed: () {
-                                Future<dynamic> loadProducts222() async {
-                                  final preferences2 =
-                                      await SharedPreferences.getInstance();
-                                  final token = preferences2.getString("token");
-
-                                  final response = await http.post(
-                                    Uri.parse(
-                                      "https://petroplus-api-dev.herokuapp.com/v1/orders/?status=AWAT&page=1&limit=10",
-                                    ),
-                                    body: jsonEncode(
-                                      // Map<String, dynamic> data = jsonDecode(response.body);
-                                      // Map controleLoop = data["items"];
-                                      {
-                                        "customerId": null,
-                                        "customerVehicleId":
-                                            "b6fa86c1-9fac-4098-966f-b21276c066c8",
-                                        "customerName":
-                                            "Hallan testando Retorno",
-                                        "customerDocument": "12345678/100",
-                                        "phoneNumber": "85986396225",
-                                        "email": "teste5555@gmail.com",
-                                        "vehicleMakerId": 2,
-                                        "vehicleModelId": 2,
-                                        "vehicleYear": "2021-1",
-                                        "vehicleColor": "Branco",
-                                        "clientId":
-                                            "936be4b1-a1e6-43d2-a207-788e7f16fb34",
-                                        "licensePlate": "HAS5555",
-                                        "mileage": "5000"
-                                      },
-                                    ),
-                                    headers: {
-                                      'Content-Type': 'application/json',
-                                      'Accept': 'application/json',
-                                      'Authorization': 'Bearer $token',
-                                    },
+                              onPressed: () async {
+                                var result = await locator
+                                    .get<AddOrderController>()
+                                    .onCreateNewOrder(
+                                      nomeCompletoController.text,
+                                      cpfController.text,
+                                      celularController.text,
+                                      emailController.text,
+                                      anoTextController.text,
+                                      corTextController.text,
+                                      _licensePlate,
+                                      kilometragemTextController.text,
+                                    );
+                                if (result) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => VehicleData()),
                                   );
                                 }
-
-                                loadProducts222();
                               },
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(24, 11, 24, 11),
@@ -897,6 +604,178 @@ class FormularioDeEntradaPostVEiculo extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _marcaTextFormField() {
+    return TextFormField(
+      controller: marcaTextController,
+    );
+  }
+
+  Widget _modeloTextFormField() {
+    return TextFormField(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+
+  Widget _anoTextFormField() {
+    return TextFormField(
+      controller: anoTextController,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+
+  Widget _corTextFormField() {
+    return TextFormField(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      style: const TextStyle(
+        fontSize: 12,
+      ),
+    );
+  }
+
+  Widget _kilometragemTextFormField() {
+    return TextFormField(
+      controller: kilometragemTextController,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+}
+
+class _DadosDoCliente extends StatelessWidget {
+  _DadosDoCliente({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Flexible(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Dados do Cliente",
+                        style: TextStyle(
+                          fontFamily: 'Manrope',
+                          fontWeight: FontWeight.normal,
+                          fontSize: 30,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                      Container(
+                        height: 20,
+                      ),
+                      Text(
+                        "Nome Completo",
+                        style: TextStyle(
+                          fontFamily: 'Manrope',
+                          fontWeight: FontWeight.normal,
+                          fontSize: 15,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                      _nomeCompletoTextField(),
+                      Text(
+                        "Celular",
+                        style: TextStyle(
+                          fontFamily: 'Manrope',
+                          fontWeight: FontWeight.normal,
+                          fontSize: 15,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                      _celularTextField(),
+                    ],
+                  ),
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "",
+                        style: TextStyle(
+                          fontFamily: 'Manrope',
+                          fontWeight: FontWeight.normal,
+                          fontSize: 30,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                      Container(
+                        height: 20,
+                      ),
+                      Text(
+                        "CPF/CNPJ",
+                        style: TextStyle(
+                          fontFamily: 'Manrope',
+                          fontWeight: FontWeight.normal,
+                          fontSize: 15,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                      _cpjTextField(),
+                      Text(
+                        "e-Mail",
+                        style: TextStyle(
+                          fontFamily: 'Manrope',
+                          fontWeight: FontWeight.normal,
+                          fontSize: 15,
+                          color: Color.fromARGB(255, 0, 0, 0),
+                        ),
+                      ),
+                      _emailTextField(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _nomeCompletoTextField() {
+    return TextFormField(
+      controller: nomeCompletoController,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+
+  Widget _cpjTextField() {
+    return TextFormField(
+      controller: cpfController,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+
+  Widget _celularTextField() {
+    return TextFormField(
+      controller: celularController,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+
+  Widget _emailTextField() {
+    return TextFormField(
+      controller: emailController,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 }
