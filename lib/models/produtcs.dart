@@ -1,8 +1,8 @@
 import 'item.dart';
 import 'meta.dart';
 
-class Produtc {
-  Produtc({
+class Produtcs {
+  Produtcs({
     this.meta,
     this.items,
   });
@@ -10,7 +10,7 @@ class Produtc {
   Meta? meta;
   List<Item>? items;
 
-  factory Produtc.fromJson(Map<String, dynamic> json) => Produtc(
+  factory Produtcs.fromJson(Map<String, dynamic> json) => Produtcs(
         meta: Meta.fromJson(json["meta"]),
         items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
       );

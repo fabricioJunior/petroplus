@@ -1,19 +1,19 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
-import 'package:petroplus/errors/http_client_error_handler.dart';
+import 'package:petroplus/errors/excepions.dart';
 import 'package:petroplus/models/produtcs.dart';
 
-import '../errors/excepions.dart';
+import '../errors/http_client_error_handler.dart';
 
-class RecommedationsRepository {
+class ProductsRepository {
   final Dio _client;
 
-  RecommedationsRepository(this._client);
+  ProductsRepository(this._client);
 
-  Future<Produtcs> recommendations() async {
+  Future<Produtcs> produtcs() async {
     try {
       Response response = await _client.get(
-        'products?recommendations=true',
+        'products',
       );
       return Produtcs.fromJson(response.data);
     } on DioError catch (e) {
