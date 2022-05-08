@@ -8,10 +8,10 @@ import '../../repositories/order_repository.dart';
 part 'add_passager_event.dart';
 part 'add_passager_state.dart';
 
-class AddPassagerBloc extends Bloc<AddPassagerEvent, AddPassagerState> {
+class AddPassangerBloc extends Bloc<AddPassagerEvent, AddPassagerState> {
   final OrderRepository orderRepository;
 
-  AddPassagerBloc(this.orderRepository) : super(AddPassagerInitial()) {
+  AddPassangerBloc(this.orderRepository) : super(AddPassagerInitial()) {
     on<AddPassagerStarted>(_onAddPassagerStarted);
     on<AddPassagerCheckedOrderByLicensePlate>(
       _onAddPassagerCheckedOrderByLicensePlate,

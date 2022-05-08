@@ -22,7 +22,7 @@ class _IncomingAppointmentsTabletState
   void initState() {
     // TODO: implement initState
     super.initState();
-    locator.get<XOrderController>().getTodos();
+    locator.get<XOrderController>().getXOrders();
   }
 
 // __________________________________________________
@@ -252,7 +252,7 @@ class _IncomingAppointmentsMobileState
   void initState() {
     // TODO: implement initState
     super.initState();
-    locator.get<XOrderController>().getTodos();
+    locator.get<XOrderController>().getXOrders();
   }
 
   @override

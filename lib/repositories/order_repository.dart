@@ -84,7 +84,7 @@ class OrderRepository {
     }
   }
 
-  Future<List<XOrderModel>> getOrders() async {
+  Future<List<XOrderModel>> getXOrders() async {
     try {
       final preferences = await SharedPreferences.getInstance();
       final token = preferences.getString("token");

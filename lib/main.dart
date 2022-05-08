@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:petroplus/service_locator.dart';
 
 import 'adapters/cache/petroplus_storages.dart';
 import 'adapters/clients/firebase.dart';
@@ -11,6 +12,7 @@ void main() async {
   await inicializarStorage(PETROPLUS_STORAGES);
   WidgetsFlutterBinding.ensureInitialized();
   await initialyzeFirebase();
+  await registerServices();
   // await FirebaseAuth.instance.useAuthEmulator('localhost', 49760);
   runApp(const MyApp());
 }

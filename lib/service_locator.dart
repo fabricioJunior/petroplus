@@ -1,7 +1,9 @@
 import 'package:get_it/get_it.dart';
+import 'package:petroplus/pages/add_passenger/add_passenger_page.dart';
 
 import 'adapters/cache/order_store.dart';
 import 'adapters/clients/http_client.dart';
+import 'blocs/add_passager_bloc/add_passager_bloc.dart';
 import 'controllers/add_order_controller.dart';
 import 'controllers/x_order/x_order_controler.dart';
 import 'repositories/login_repository.dart';
@@ -20,4 +22,5 @@ Future<void> registerServices() async {
   );
   locator.registerSingleton<XOrderController>(XOrderController(locator.get<OrderRepository>()));
   locator.registerSingleton<LoginRepository>(LoginRepository(_client));
+  locator.registerSingleton<AddPassangerBloc>(AddPassangerBloc(locator.get<OrderRepository>()));
 }

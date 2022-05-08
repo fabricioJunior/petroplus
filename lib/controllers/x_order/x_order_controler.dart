@@ -10,10 +10,10 @@ class XOrderController extends ValueNotifier<StateTodo> {
 
   XOrderController(this.orderRepository) : super(StateTodoStart());
   
-  Future<void> getTodos() async {
+  Future<void> getXOrders() async {
     try {
       value = StateTodoLoading();
-      final todos = await orderRepository.getOrders();
+      final todos = await orderRepository.getXOrders();
       value = StateTodoSuccess(todos);
     } on DioError {
       value = StateTodoError("Erro inesperado!");

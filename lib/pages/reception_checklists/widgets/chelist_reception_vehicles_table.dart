@@ -146,7 +146,7 @@ class _ChelistReceptionVehiclesTableMobileState
   void initState() {
     // TODO: implement initState
     super.initState();
-    locator.get<XOrderController>().getTodos();
+    locator.get<XOrderController>().getXOrders();
   }
 
   @override

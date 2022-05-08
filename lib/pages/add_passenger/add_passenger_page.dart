@@ -60,8 +60,8 @@ class AddPassenger extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AddPassagerBloc, AddPassagerState>(
-      bloc: locator.get<AddPassagerBloc>(),
+    return BlocListener<AddPassangerBloc, AddPassagerState>(
+      bloc: locator.get<AddPassangerBloc>(),
       listenWhen: (previous, current) =>
           current is AddPassagerCheckOrderByLicensePlateSucess,
       listener: (context, state) {
