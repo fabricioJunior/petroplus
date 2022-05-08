@@ -74,7 +74,9 @@ class AddPassenger extends StatelessWidget {
         } else {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => VehicleDataFalse(licensePlate: analisePlacaInterno.text)),
+            MaterialPageRoute(
+                builder: (context) =>
+                    VehicleDataFalse(licensePlate: analisePlacaInterno.text)),
           );
         }
       },
@@ -174,18 +176,24 @@ class AddPassenger extends StatelessWidget {
                                 primary: Color.fromARGB(255, 255, 81, 0),
                               ),
                               onPressed: () async {
-                                var order = await locator.get<OrderRepository>().getOrderByLicensePlate(analisePlacaInterno.text);
+                                var order = await locator
+                                    .get<OrderRepository>()
+                                    .getOrderByLicensePlate(
+                                        analisePlacaInterno.text);
 
                                 if (order != null) {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => VehicleData()),
+                                    MaterialPageRoute(
+                                        builder: (context) => VehicleData()),
                                   );
                                 } else {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => VehicleDataFalse(licensePlate: analisePlacaInterno.text),
+                                      builder: (context) => VehicleDataFalse(
+                                          licensePlate:
+                                              analisePlacaInterno.text),
                                     ),
                                   );
                                 }
@@ -211,9 +219,11 @@ class AddPassenger extends StatelessWidget {
                                 primary: Color.fromARGB(255, 255, 255, 255),
                               ),
                               onPressed: () async {
-                                var order = await locator.get<OrderRepository>().getOrderByLicensePlate(
-                                  analisePlacaInterno.text,
-                                );
+                                var order = await locator
+                                    .get<OrderRepository>()
+                                    .getOrderByLicensePlate(
+                                      analisePlacaInterno.text,
+                                    );
                                 if (order != null) {
                                   Navigator.push(
                                     context,
@@ -224,7 +234,9 @@ class AddPassenger extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => VehicleDataFalse(licensePlate: analisePlacaInterno.text),
+                                      builder: (context) => VehicleDataFalse(
+                                          licensePlate:
+                                              analisePlacaInterno.text),
                                     ),
                                   );
                                 }

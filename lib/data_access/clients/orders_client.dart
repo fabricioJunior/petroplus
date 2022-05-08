@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:petroplus/models/orders_list.dart';
+import 'package:petroplus/models/orders_list_model.dart';
 import 'package:petroplus/models/vehicle_model.dart';
 
 class OrdersClient {
@@ -7,7 +7,7 @@ class OrdersClient {
 
   OrdersClient(this.client);
 
-  Future<OrdersList> getAll() async {
+  Future<OrdersListModel> getAll() async {
     Response response = await client.get(
       'orders?status[]=AAPR&status[]=DLVD&status[]=INSP&status[]=IPGR&status[]=PAID&status[]=PEND&status[]=QUTD&status[]=RFCO&status[]=AWAT',
     );
@@ -42,8 +42,8 @@ class OrdersClient {
     }
   }
 
-  OrdersList _montarObjeto(Map<String, dynamic> json) {
-    return OrdersList.fromJson(json);
+  OrdersListModel _montarObjeto(Map<String, dynamic> json) {
+    return OrdersListModel.fromJson(json);
   }
 
   VehicleModel _montarVehicle(Map<String, dynamic> json) {

@@ -141,7 +141,7 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
                             emailClienteTrue: _emailVehicleDataTrue,
                             modeloClienteTrue: _modeloVehicleDataTrue,
                             nomeClienteTrue: _nomeVehicleDataTrue,
-                            placaClienteTrue: _placaVehicleDataTrue,
+                            placaClienteTrue: widget.licensePlate,
                             statusClienteTrue: _statusVehicleDataTrue,
                           ),
                           Container(
@@ -149,7 +149,7 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
                             height: 1,
                             color: Color.fromARGB(34, 107, 107, 107),
                           ),
-                          FormularioDeEntradaPostVEiculo(),
+                          FormularioDeEntradaPostVeiculo(),
                         ],
 // ------------------------------------------------Body/Mobile
                         if (!isTablet) ...[
@@ -389,8 +389,8 @@ final TextEditingController corTextController = TextEditingController();
 final TextEditingController kilometragemTextController =
     TextEditingController();
 
-class FormularioDeEntradaPostVEiculo extends StatelessWidget {
-  FormularioDeEntradaPostVEiculo({Key? key}) : super(key: key);
+class FormularioDeEntradaPostVeiculo extends StatelessWidget {
+  FormularioDeEntradaPostVeiculo({Key? key}) : super(key: key);
   final preferences = SharedPreferences.getInstance();
 
   @override
@@ -560,9 +560,27 @@ class FormularioDeEntradaPostVEiculo extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 primary: Color.fromARGB(255, 255, 81, 0),
                               ),
-                              onPressed: () => locator
-                                  .get<AddOrderController>()
-                                  .onGetVehicleByLicensePlate(_licensePlate),
+                              onPressed: () async {
+                                var result = await locator
+                                    .get<AddOrderController>()
+                                    .onCreateNewOrder(
+                                      nomeCompletoController.text,
+                                      cpfController.text,
+                                      celularController.text,
+                                      emailController.text,
+                                      anoTextController.text,
+                                      corTextController.text,
+                                      _licensePlate,
+                                      kilometragemTextController.text,
+                                    );
+                                if (result) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => VehicleData()),
+                                  );
+                                }
+                              },
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(24, 11, 24, 11),
                                 child: Text(

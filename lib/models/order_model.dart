@@ -1,60 +1,78 @@
-import 'package:equatable/equatable.dart';
+import 'dart:convert';
+
 import '../storages/storage_entity.dart';
 
-// ignore: must_be_immutable
-class OrderModel extends Equatable with StorageEntity {
-  final DateTime createdAt;
-  final DateTime updateAt;
-  final String id;
-  final String licensePlate;
-  List<OrderModel>? orders;
+OrderModel orderModelFromJson(String str) =>
+    OrderModel.fromJson(json.decode(str));
 
-  OrderModel(
-    this.createdAt,
-    this.updateAt,
-    this.id,
+String orderModelToJson(OrderModel data) => json.encode(data.toJson());
+
+class OrderModel extends StorageEntity {
+  OrderModel({
+    this.customerId,
+    this.customerVehicleId,
+    this.customerName,
+    this.customerDocument,
+    this.phoneNumber,
+    this.email,
+    this.vehicleMakerId,
+    this.vehicleModelId,
+    this.vehicleYear,
+    this.vehicleColor,
+    this.clientId,
     this.licensePlate,
-    this.orders,
-  );
+    this.mileage,
+  });
 
-  OrderModel.fromJson(Map<String, dynamic> json)
-    : createdAt = DateTime.parse(json['created_at']),
-      updateAt = DateTime.parse(json['updated_at']),
-      id = json['id'],
-      licensePlate = json['license_plate'] ?? '';
+  dynamic? customerId;
+  String? customerVehicleId;
+  String? customerName;
+  String? customerDocument;
+  String? phoneNumber;
+  String? email;
+  int? vehicleMakerId;
+  int? vehicleModelId;
+  String? vehicleYear;
+  String? vehicleColor;
+  String? clientId;
+  String? licensePlate;
+  String? mileage;
+
+  factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
+        customerId: json["customerId"],
+        customerVehicleId: json["customerVehicleId"],
+        customerName: json["customerName"],
+        customerDocument: json["customerDocument"],
+        phoneNumber: json["phoneNumber"],
+        email: json["email"],
+        vehicleMakerId: json["vehicleMakerId"],
+        vehicleModelId: json["vehicleModelId"],
+        vehicleYear: json["vehicleYear"],
+        vehicleColor: json["vehicleColor"],
+        clientId: json["clientId"],
+        licensePlate: json["licensePlate"],
+        mileage: json["mileage"],
+      );
 
   OrderModel.fromStorage(Map<String, dynamic> props)
-    : createdAt = props['createdAt'],
-      updateAt = props['updatedAt'],
-      id = props['id'],
-      licensePlate = props['licensePlate'];
+      : licensePlate = props['licensePlate'];
 
-  List<OrderModel>? mapOrders(Map<String, dynamic> json) {
-    orders =  json['items'].map<OrderModel>((e) => OrderModel.fromJson(e)).toList();
-    return orders;
-  }
-
-  OrderModel? getByLiscencePlate(String licensePlate) {
-    var busca = orders!.where((order) => order.licensePlate == licensePlate);
-    if (busca.isNotEmpty) {
-      return busca.first;
-    }
-    return null;
-  }
-
-  @override
-  List<Object?> get props => [
-    createdAt,
-    updateAt,
-    id,
-    licensePlate,
-  ];
+  Map<String, dynamic> toJson() => {
+        "customerId": null,
+        "customerVehicleId": "b6fa86c1-9fac-4098-966f-b21276c066c8",
+        "customerName": customerName,
+        "customerDocument": customerDocument,
+        "phoneNumber": phoneNumber,
+        "email": email,
+        "vehicleMakerId": 2,
+        "vehicleModelId": 2,
+        "vehicleYear": vehicleYear,
+        "vehicleColor": vehicleColor,
+        "clientId": "936be4b1-a1e6-43d2-a207-788e7f16fb34",
+        "licensePlate": licensePlate,
+        "mileage": mileage,
+      };
 
   @override
-  Map<String, dynamic> get storageProperties => {
-    'createdAt': createdAt,
-    'updateAt': updateAt,
-    'id': id,
-    'licensePlate': licensePlate,
-  };
+  Map<String, dynamic> get storageProperties => throw UnimplementedError();
 }

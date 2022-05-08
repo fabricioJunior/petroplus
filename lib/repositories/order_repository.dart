@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
+import 'package:petroplus/models/user.dart';
 import '../adapters/cache/order_store.dart';
 import '../errors/excepions.dart';
 import '../models/orders_list_model.dart';
@@ -32,8 +33,21 @@ class OrderRepository {
     }
   }
 
+  // Future<void> newVehicle(String marca, String modelo, String combustivel,
+  //     String ano, String cor, String kilometragem,) async {
+  //   try {
+  //     var newVehicle = VehicleModel(vehicleMakerId: 0, vehicleColor: cor, mileage: kilometragem,);
+  //     Response response = await _client.post('customer_vehicles', data: );
+
+  //   } catch (e) {}
+  // }
+
+  // Future<bool> newClient(String nomeCompleto, String cpf, String celular, String email,) async {
+  //      var newUser = User(name: nomeCompleto,id: cpf,email: email,);
+  // }
+
   Future<VehicleModel> getVehicleByLicensePlate(String licensePlate) async {
-    try {      
+    try {
       Response response = await _client.get(
         'customer_licenses/byLicensePlate/$licensePlate',
       );
@@ -48,17 +62,17 @@ class OrderRepository {
   }
 
   Future<OrderModel?> getOrderByLicensePlate(String licensePlate) async {
-    try {    
+    try {
       List<OrderModel> orders = await _orderStore.fetchAll();
-      OrderModel? result = OrdersListModel(orders).getByLiscencePlate(licensePlate);
-      
+      OrderModel? result =
+          OrdersListModel(orders).getByLiscencePlate(licensePlate);
+
       if (result != null) {
         return result;
       }
 
       final data = await getAll();
       return data.getByLiscencePlate(licensePlate);
-      
     } on DioError catch (e) {
       throw getHttpClientException(e);
     } on PlatformException {
@@ -90,8 +104,7 @@ class OrderRepository {
       final token = preferences.getString("token");
 
       final response = await _client.get(APIS.urlOrder,
-        options: Options(headers: {"Authorization": "Bearer $token"})
-      );
+          options: Options(headers: {"Authorization": "Bearer $token"}));
       final data = response.data['items'] as List;
       final todos = data.map((map) => XOrderModel.fromMap(map)).toList();
       return todos;
