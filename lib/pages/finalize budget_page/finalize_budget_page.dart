@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petroplus/pages/add_passenger/add_passenger_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../widgets/appbar_uni_widget.dart';
 import 'package:http/http.dart' as http;
 
+import '../../blocs/finalize_budget_bloc/finalize_budget_bloc.dart';
 import '../add_passenger/add_passenger_page.dart';
 import '../drawer_menu.dart/navigation_drawer_menu.dart';
 
@@ -117,133 +119,17 @@ class _FinalizeBudgetPageState extends State<FinalizeBudgetPage> {
             Center(
               child: Container(
                 // width: MediaQuery.of(context).size.width * .9,
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    var isTablet = constraints.maxWidth > 500;
-                    return Column(
-                      children: [
-// ------------------------------------------------Body/Tablet
-                        if (isTablet) ...[
-                          // ------------------------------------------------Checklists de Recepção
-
-                          BarraHistoricoVeiculo(
-                            contatoClienteTrue: _contatoVehicleDataTrue ??
-                                "Contato não cadastrado",
-                            emailClienteTrue:
-                                _emailVehicleDataTrue ?? "Email não cadastrado",
-                            modeloClienteTrue: _modeloVehicleDataTrue ??
-                                "Modelo não cadastrado",
-                            nomeClienteTrue:
-                                _nomeVehicleDataTrue ?? "Nome não cadastrado",
-                            placaClienteTrue: _placaVehicleDataTrue,
-                            statusClienteTrue: _statusVehicleDataTrue ??
-                                " Status não cadastrado",
-                          ),
-                          FinalizarOrcamentoPaginaFinal(),
-                          PacoteTileFinalRetorno(),
-
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 50, 0, 20),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Column(
-                                    children: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          primary:
-                                              Color.fromARGB(255, 255, 81, 0),
-                                        ),
-                                        onPressed: () {},
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              24, 11, 24, 11),
-                                          child: Text(
-                                            'Sair do Checklist',
-                                            style: TextStyle(
-                                              fontFamily: 'Manrope',
-                                              fontSize: 14,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Column(
-                                    children: [
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            side: BorderSide(
-                                              color: Color(0xffff6601),
-                                            ),
-                                            primary: Color.fromARGB(
-                                                255, 255, 255, 255),
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 12, vertical: 7),
-                                            textStyle: TextStyle(
-                                                fontSize: 30,
-                                                fontWeight: FontWeight.bold)),
-                                        onPressed: () {},
-                                        child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              40, 12, 40, 12),
-                                          child: Text(
-                                            "Próximo",
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontFamily: 'Manrope',
-                                              fontWeight: FontWeight.w600,
-                                              color: Color(0xffff6601),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Checkbox(
-                                    value: entradaItens[0]["check"],
-                                    onChanged: (value) {
-                                      setState(() {
-                                        entradaItens[0]["check"] = value;
-                                      });
-                                    }),
-                                Text(
-                                  "Enviar cópia para o e-Mail do cliente",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontFamily: 'Manrope',
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff2E2C34),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-// ------------------------------------------------Body/Mobile
-                        if (!isTablet) ...[
-                          // ------------------------------------------------Checklists de Recepção
-                        ],
-// ------------------------------------------------
-                      ],
-                    );
+                child: BlocBuilder<FinalizeBudgetBloc, FinalizeBugetState>(
+                  builder: (context, state) {
+                    switch (state.runtimeType) {
+                      case FinalizeBugetInitial:
+                      case FinalizeBugetLoadInProgresso:
+                        return _loadState();
+                      case FinalizeBugetLoadSucess:
+                        return _loadSucessState();
+                      default:
+                        return _failLoadState();
+                    }
                   },
                 ),
               ),
@@ -252,6 +138,149 @@ class _FinalizeBudgetPageState extends State<FinalizeBudgetPage> {
         ),
 // ------------------------------------------------
       ),
+    );
+  }
+
+  Widget _loadSucessState() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        var isTablet = constraints.maxWidth > 500;
+        return Column(
+          children: [
+            // ------------------------------------------------Body/Tablet
+            if (isTablet) ...[
+              // ------------------------------------------------Checklists de Recepção
+
+              BarraHistoricoVeiculo(
+                contatoClienteTrue:
+                    _contatoVehicleDataTrue ?? "Contato não cadastrado",
+                emailClienteTrue:
+                    _emailVehicleDataTrue ?? "Email não cadastrado",
+                modeloClienteTrue:
+                    _modeloVehicleDataTrue ?? "Modelo não cadastrado",
+                nomeClienteTrue: _nomeVehicleDataTrue ?? "Nome não cadastrado",
+                placaClienteTrue: _placaVehicleDataTrue,
+                statusClienteTrue:
+                    _statusVehicleDataTrue ?? " Status não cadastrado",
+              ),
+              FinalizarOrcamentoPaginaFinal(),
+              PacoteTileFinalRetorno(),
+
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 50, 0, 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Color.fromARGB(255, 255, 81, 0),
+                            ),
+                            onPressed: () {},
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(24, 11, 24, 11),
+                              child: Text(
+                                'Sair do Checklist',
+                                style: TextStyle(
+                                  fontFamily: 'Manrope',
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                side: BorderSide(
+                                  color: Color(0xffff6601),
+                                ),
+                                primary: Color.fromARGB(255, 255, 255, 255),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 7),
+                                textStyle: TextStyle(
+                                    fontSize: 30, fontWeight: FontWeight.bold)),
+                            onPressed: () {},
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(40, 12, 40, 12),
+                              child: Text(
+                                "Próximo",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Manrope',
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xffff6601),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Checkbox(
+                        value: entradaItens[0]["check"],
+                        onChanged: (value) {
+                          setState(() {
+                            entradaItens[0]["check"] = value;
+                          });
+                        }),
+                    Text(
+                      "Enviar cópia para o e-Mail do cliente",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Manrope',
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xff2E2C34),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            // ------------------------------------------------Body/Mobile
+            if (!isTablet) ...[
+              // ------------------------------------------------Checklists de Recepção
+            ],
+            // ------------------------------------------------
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _loadState() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        CircularProgressIndicator(),
+      ],
+    );
+  }
+
+  Widget _failLoadState() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [Text('Falha no carregamento das informações')],
     );
   }
 

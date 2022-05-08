@@ -4,12 +4,12 @@ import 'package:petroplus/models/meta.dart';
 
 import 'item.dart';
 
-Service serviceFromJson(String str) => Service.fromJson(json.decode(str));
+Services serviceFromJson(String str) => Services.fromJson(json.decode(str));
 
-String serviceToJson(Service data) => json.encode(data.toJson());
+String serviceToJson(Services data) => json.encode(data.toJson());
 
-class Service {
-  Service({
+class Services {
+  Services({
     this.meta,
     this.items,
   });
@@ -17,7 +17,7 @@ class Service {
   Meta? meta;
   List<Item>? items;
 
-  factory Service.fromJson(Map<String, dynamic> json) => Service(
+  factory Services.fromJson(Map<String, dynamic> json) => Services(
         meta: Meta.fromJson(json["meta"]),
         items: List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
       );
