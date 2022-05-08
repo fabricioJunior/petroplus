@@ -19,7 +19,7 @@ class chelistReceptionVehiclesTableTablet extends StatelessWidget {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+          children: const [
             Flexible(
               flex: 4,
               child: Center(

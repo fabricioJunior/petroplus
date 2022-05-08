@@ -1,5 +1,5 @@
-class Item {
-  Item({
+class ItemModel {
+  ItemModel({
     this.createdAt,
     this.updatedAt,
     this.id,
@@ -25,7 +25,7 @@ class Item {
   String? clientId;
   DateTime? deletedAt;
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
+  factory ItemModel.fromJson(Map<String, dynamic> json) => ItemModel(
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         id: json["id"],

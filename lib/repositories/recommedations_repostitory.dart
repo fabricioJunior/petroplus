@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:petroplus/models/produtc.dart';
+import 'package:petroplus/models/product_model.dart';
 
 class RecommedationsRepository {
   final Dio _client;

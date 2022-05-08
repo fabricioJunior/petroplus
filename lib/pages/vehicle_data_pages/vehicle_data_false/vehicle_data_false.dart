@@ -252,28 +252,13 @@ class BarraHistoricoVeiculo extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        "Nome Cliente:",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'Manrope',
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      Container(
-                        width: 3,
-                      ),
-                      Text(
-                        "$nomeClienteTrue",
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'Manrope',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    "$nomeClienteTrue",
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontFamily: 'Manrope',
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   Container(height: 3),
                   Row(

@@ -1,5 +1,5 @@
-class Meta {
-  Meta({
+class MetaModel {
+  MetaModel({
     this.totalItems,
     this.itemCount,
     this.itemsPerPage,
@@ -13,7 +13,7 @@ class Meta {
   int? totalPages;
   int? currentPage;
 
-  factory Meta.fromJson(Map<String, dynamic> json) => Meta(
+  factory MetaModel.fromJson(Map<String, dynamic> json) => MetaModel(
         totalItems: json["totalItems"],
         itemCount: json["itemCount"],
         itemsPerPage: json["itemsPerPage"],
