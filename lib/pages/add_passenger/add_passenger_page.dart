@@ -69,7 +69,7 @@ class AddPassenger extends StatelessWidget {
         height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/img/fundo1.png'),
+            image: AssetImage('img/fundo1.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -117,7 +117,7 @@ class AddPassenger extends StatelessWidget {
                           height: 100,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage('assets/img/placaMaior.png'),
+                              image: AssetImage('img/placaMaior.png'),
                               fit: BoxFit.cover,
                             ),
                           ),

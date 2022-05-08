@@ -31,7 +31,7 @@ class NavigationDrawerMenu extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset("assets//img/Model3.png"),
+              Image.asset("img/Model3.png"),
               // --------------------------Informações do Cliente
               Form(
                 child: Padding(
