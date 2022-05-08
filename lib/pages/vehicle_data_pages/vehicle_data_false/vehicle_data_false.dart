@@ -133,7 +133,7 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
                     return Column(
                       children: [
 // ------------------------------------------------Body/Tablet
-                        if (!isTablet) ...[
+                        if (isTablet) ...[
                           // ------------------------------------------------Checklists de Recepção
 
                           BarraHistoricoVeiculo(
