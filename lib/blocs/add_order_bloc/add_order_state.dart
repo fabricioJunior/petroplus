@@ -10,7 +10,6 @@ class AddOrderLoadSucess extends AddOrderState {}
 
 class AddOrderLoadError extends AddOrderState {}
 
-
 class AddOrderCheckOrderByLicensePlateSucess extends AddOrderState {
   final bool containsOrder;
 

@@ -26,7 +26,7 @@ class OrdersClient {
   Future<bool> post(Map<String, dynamic> data) async {
     try {
       Response response = await client.post(
-        'orders/?status=AWAT&page=1&limit=10',
+        'orders',
         data: data,
       );
       handleError(response);
