@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import '../../pages/delivery_audit/delivery_audit_page.dart';
+import '../../pages/finalize budget_page/finalize_budget_page.dart';
 import '../../pages/index.dart';
+import '../../pages/model_vehicle/model_vehicle_page.dart';
+import '../../pages/service_menu_page/service_menu_page.dart';
 
 class Splach extends StatefulWidget {
   const Splach({Key? key}) : super(key: key);
@@ -18,8 +22,8 @@ class _SplachState extends State<Splach> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            //return VehicleDataFalse();
-            return HomeSplash();
+            return FinalizeBudgetPage();
+            //return HomeSplash();
           },
         ),
         (route) => false,
@@ -45,7 +49,7 @@ class _SplachState extends State<Splach> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/img/logofundobranco.png',
+                    'img/logofundobranco.png',
                   ),
                 ],
               ),

@@ -17,7 +17,7 @@ class ChooseModels extends StatelessWidget {
         height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/img/FundoMiscBG.png'),
+            image: AssetImage('img/FundoMiscBG.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -74,7 +74,7 @@ class ChooseModels extends StatelessWidget {
                   children: [
                     Container(
                       width: 230,
-                      child: Image.asset('assets/img/Model3.png'),
+                      child: Image.asset('img/Model3.png'),
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
