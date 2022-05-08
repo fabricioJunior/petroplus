@@ -1,43 +1,17 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:petroplus/blocs/add_passager_bloc/add_passager_bloc.dart';
-import 'package:petroplus/providers/providers.dart';
-import 'package:petroplus/repositories/orders_repository.dart';
-import 'package:petroplus/screen/splash/splash_screen.dart';
-import 'package:petroplus/storages/storages_controller.dart';
-import 'package:provider/provider.dart';
-import 'autenticacao/http_interceptos.dart';
-import 'controler_provider/inc_controller.dart';
-import 'data_access/cache/orders_store.dart';
-import 'data_access/cache/petroplus_storages.dart';
-import 'data_access/clients/orders_client.dart';
+
+import 'adapters/cache/petroplus_storages.dart';
+import 'adapters/clients/firebase.dart';
+import 'pages/splash.dart';
+import 'storages/storages_controller.dart';
 
 void main() async {
   await Hive.initFlutter();
   await inicializarStorage(PETROPLUS_STORAGES);
-
   WidgetsFlutterBinding.ensureInitialized();
-  if (!kIsWeb) {
-    await Firebase.initializeApp();
-  } else {
-    await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: "AIzaSyDJ4BVZTJv6hPJBg9PUmjS6XZBc7SmX8BM",
-        authDomain: "petroplay-stp.firebaseapp.com",
-        projectId: "petroplay-stp",
-        storageBucket: "petroplay-stp.appspot.com",
-        messagingSenderId: "558302509436",
-        appId: "1:558302509436:web:5c34b26d3f9af2471d4cf9",
-        measurementId: "G-HVJQFXQWMS",
-      ),
-    );
-  }
-
+  await initialyzeFirebase();
   // await FirebaseAuth.instance.useAuthEmulator('localhost', 49760);
-
   runApp(const MyApp());
 }
 
@@ -46,36 +20,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => IncController(),
-        ),
-        Provider<AddPassagerBloc>(
-          create: (context) => AddPassagerBloc(
-            OrdersRepository(
-              OrdersClient(client()),
-              OrdersStore(),
-            ),
-          ),
-        )
-      ],
-      child: const MaterialApp(
-        // home: ChangeNotifierProvider(
-        home: SplachScreen(),
-        //   create: (_) => IncController(),
-        // ),
-        debugShowCheckedModeBanner: false,
-      ),
-    );
-  }
-
-  RepositoryProvider<OrdersRepository> _orderRepositoryProvider() {
-    return RepositoryProvider(
-      create: (context) => OrdersRepository(
-        OrdersClient(client()),
-        OrdersStore(),
-      ),
+    return MaterialApp(
+      home: Splach(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

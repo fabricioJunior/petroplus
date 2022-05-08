@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../pages/appbar_message_alert_page/navigation_drawer_menu.dart';
-
 class AppBarUniv extends StatefulWidget {
   const AppBarUniv({Key? key}) : super(key: key);
 

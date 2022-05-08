@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../pages/index.dart';
 
-class SplachScreen extends StatefulWidget {
-  const SplachScreen({Key? key}) : super(key: key);
+class Splach extends StatefulWidget {
+  const Splach({Key? key}) : super(key: key);
 
   @override
-  State<SplachScreen> createState() => _SplachScreenState();
+  State<Splach> createState() => _SplachState();
 }
 
-class _SplachScreenState extends State<SplachScreen> {
+class _SplachState extends State<Splach> {
   @override
   // ignore: must_call_super
   void initState() {

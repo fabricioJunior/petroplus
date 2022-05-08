@@ -2,22 +2,18 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../../../controllers/add_order_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:petroplus/autenticacao/http_interceptos.dart';
-import 'package:petroplus/pages/vehicle_data_pages/vehicle_data_true/vehicle_data_true.dart';
+import '../vehicle_data_true/vehicle_data_true.dart';
 
-import '../../../blocs/add_order_bloc/add_order_bloc.dart';
-import '../../../data_access/cache/orders_store.dart';
-import '../../../data_access/clients/orders_client.dart';
-import '../../../repositories/orders_repository.dart';
+import '../../../service_locator.dart';
 import '../../../widgets/appbar_uni_widget.dart';
 import '../../add_passenger/add_passenger_page.dart';
 import '../../drawer_menu.dart/navigation_drawer_menu.dart';
 
 // class AnaliseVeiculoRotaMap {}
 
-final _addOrderBloc = AddOrderBloc(OrdersRepository(OrdersClient(client()), OrdersStore()));
 late String _licensePlate;
 class VehicleDataFalse extends StatefulWidget {
   final String licensePlate;
@@ -851,7 +847,7 @@ class FormularioDeEntradaPostVEiculo extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 primary: Color.fromARGB(255, 255, 81, 0),
                               ),
-                              onPressed: () => _addOrderBloc.add(AddOrderCheckedOrderByLicensePlate(_licensePlate)),
+                              onPressed: () => locator.get<AddOrderController>().onGetVehicleByLicensePlate(_licensePlate),
                               child: Padding(
                                 padding: EdgeInsets.fromLTRB(24, 11, 24, 11),
                                 child: Text(

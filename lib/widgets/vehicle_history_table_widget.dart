@@ -1,8 +1,9 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import '../service_locator.dart';
 
-import '../pages/dashboard_page/controles/state_todo.dart';
-import '../pages/dashboard_page/controles/todo_controler.dart';
+import '../pages/dashboard_page/controles/x_order_state.dart';
+import '../controllers/x_order/x_order_controler.dart';
 
 double porcentagemVendas = 30;
 double revisaoVendas = 50;
@@ -17,13 +18,11 @@ class IncomingAppointmentsTablet extends StatefulWidget {
 
 class _IncomingAppointmentsTabletState
     extends State<IncomingAppointmentsTablet> {
-  //Para iniciar antes de buildar a tela
-  final TodoControler todocontrole = TodoControler();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    todocontrole.getTodos();
+    locator.get<XOrderController>().getTodos();
   }
 
 // __________________________________________________
@@ -153,7 +152,7 @@ class _IncomingAppointmentsTabletState
                             color: Color.fromARGB(255, 255, 255, 255),
                             // --------------------Inicio Loop Back
                             child: ValueListenableBuilder<StateTodo>(
-                              valueListenable: todocontrole,
+                              valueListenable: locator.get<XOrderController>(),
                               builder: (context, value, _) {
                                 final state = value;
                                 if (state is StateTodoLoading) {
@@ -248,14 +247,12 @@ class IncomingAppointmentsMobile extends StatefulWidget {
 
 class _IncomingAppointmentsMobileState
     extends State<IncomingAppointmentsMobile> {
-  //Para iniciar antes de buildar a tela
-  final TodoControler todocontrole = TodoControler();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    todocontrole.getTodos();
+    locator.get<XOrderController>().getTodos();
   }
 
   @override
@@ -381,7 +378,7 @@ class _IncomingAppointmentsMobileState
                           height: 290,
                           color: Color.fromARGB(255, 255, 255, 255),
                           child: ValueListenableBuilder<StateTodo>(
-                            valueListenable: todocontrole,
+                            valueListenable: locator.get<XOrderController>(),
                             builder: (context, value, _) {
                               final state = value;
                               if (state is StateTodoLoading) {

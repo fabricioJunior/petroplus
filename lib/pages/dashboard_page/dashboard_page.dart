@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:petroplus/pages/dashboard_page/widgets/dashboard_responsive_widgets.dart';
-import 'package:petroplus/pages/dashboard_page/widgets/visao_geral_esta_semana_widgets.dart';
-import 'package:petroplus/pages/dashboard_page/widgets/widgets_analysis_all_widget.dart';
+import 'widgets/dashboard_responsive_widgets.dart';
+import 'widgets/visao_geral_esta_semana_widgets.dart';
+import 'widgets/widgets_analysis_all_widget.dart';
 import '../../widgets/appbar_uni_widget.dart';
 import '../../widgets/vehicle_history_table_widget.dart';
 import '../drawer_menu.dart/navigation_drawer_menu.dart';
