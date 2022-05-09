@@ -4,8 +4,8 @@
 
 import 'dart:convert';
 
-import 'package:petroplus/models/item.dart';
-import 'package:petroplus/models/meta.dart';
+import 'package:petroplus/models/item_model.dart';
+import 'package:petroplus/models/meta_model.dart';
 
 Customers customersFromJson(String str) => Customers.fromJson(json.decode(str));
 
@@ -17,14 +17,15 @@ class Customers {
     this.items,
   });
 
-  Meta? meta;
-  List<Item>? items;
+  MetaModel? meta;
+  List<ItemModel>? items;
 
   factory Customers.fromJson(Map<String, dynamic> json) => Customers(
-        meta: Meta.fromJson(json["meta"]),
+        meta: MetaModel?.fromJson(json["meta"]),
         items: json["items"] == null
             ? null
-            : List<Item>.from(json["items"].map((x) => Item.fromJson(x))),
+            : List<ItemModel>.from(
+                json["items"].map((x) => ItemModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
