@@ -26,7 +26,7 @@ class DeliveryAuditPage extends StatelessWidget {
             AppBarUniv(),
             // ----------------------
             Center(
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width * .9,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
@@ -37,7 +37,7 @@ class DeliveryAuditPage extends StatelessWidget {
                         if (isTablet) ...[
                           // ------------------------------------------------Checklists de Recepção
                           DeliveryAuditPageTablet(),
-                          chelistReceptionVehiclesTableTablet(),
+                          ChelistReceptionVehiclesTableTablet(),
                         ],
 // ------------------------------------------------Body/Mobile
                         if (!isTablet) ...[

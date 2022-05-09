@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:petroplus/models/customers.dart';
-import 'package:petroplus/repositories/customers_repository.dart';
-import '../../models/order_model.dart';
+import 'package:petroplus/models/order_model.dart';
 
+import '../../models/customers.dart';
+import '../../repositories/customers_repository.dart';
 import '../../repositories/order_repository.dart';
 
 part 'add_passager_event.dart';

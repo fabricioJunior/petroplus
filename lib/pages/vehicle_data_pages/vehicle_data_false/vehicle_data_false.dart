@@ -2,15 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../../../controllers/add_order_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../vehicle_data_true/vehicle_data_true.dart';
-
+import '../../../controllers/add_order_controller.dart';
 import '../../../service_locator.dart';
 import '../../../widgets/appbar_uni_widget.dart';
 import '../../add_passenger/add_passenger_page.dart';
 import '../../drawer_menu.dart/navigation_drawer_menu.dart';
+import '../vehicle_data_true/vehicle_data_true.dart';
 
 // class AnaliseVeiculoRotaMap {}
 
@@ -73,17 +72,17 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
     Map<String, dynamic> data = jsonDecode(response.body);
     Map controleLoop = data["items"][mapitemRetorno];
 
-    if (controleLoop["address_number"] == null) {
-      _contatoVehicleDataTrue = controleLoop["address_number"];
-    } else {
-      _contatoVehicleDataTrue = controleLoop["address_number"].toString();
-    }
+    // if (controleLoop["address_number"] == null) {
+    //   _contatoVehicleDataTrue = controleLoop["address_number"];
+    // } else {
+    //   _contatoVehicleDataTrue = controleLoop["address_number"].toString();
+    // }
 
-    if (controleLoop["email"] == null) {
-      _emailVehicleDataTrue = controleLoop["email"];
-    } else {
-      _emailVehicleDataTrue = controleLoop["email"].toString();
-    }
+    // if (controleLoop["email"] == null) {
+    //   _emailVehicleDataTrue = controleLoop["email"];
+    // } else {
+    //   _emailVehicleDataTrue = controleLoop["email"].toString();
+    // }
 
     if (controleLoop["vehicle_model_id"] == null) {
       _modeloVehicleDataTrue = controleLoop["vehicle_model_id"];
@@ -91,11 +90,11 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
       _modeloVehicleDataTrue = controleLoop["vehicle_model_id"].toString();
     }
 
-    if (controleLoop["customer_name"] == null) {
-      _nomeVehicleDataTrue = controleLoop["customer_name"];
-    } else {
-      _nomeVehicleDataTrue = controleLoop["customer_name"].toString();
-    }
+    // if (controleLoop["customer_name"] == null) {
+    //   _nomeVehicleDataTrue = controleLoop["customer_name"];
+    // } else {
+    //   _nomeVehicleDataTrue = controleLoop["customer_name"].toString();
+    // }
 
     if (controleLoop["status"] == null) {
       _statusVehicleDataTrue = controleLoop["status"];
@@ -108,8 +107,6 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
     } else {
       _placaVehicleDataTrue = controleLoop["license_plate"].toString();
     }
-
-    print("$controleLoop");
   }
 
   @override
@@ -125,7 +122,7 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
             // ----------------------
 
             Center(
-              child: Container(
+              child: SizedBox(
                 // width: MediaQuery.of(context).size.width * .9,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
@@ -149,7 +146,20 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
                             height: 1,
                             color: Color.fromARGB(34, 107, 107, 107),
                           ),
-                          FormularioDeEntradaPostVeiculo(),
+                          FormularioDeEntradaPostVeiculo(
+                            onCellChanged: (value) => setState(() {
+                              _contatoVehicleDataTrue = value;
+                            }),
+                            onNameChanged: (value) => setState(() {
+                              _nomeVehicleDataTrue = value;
+                            }),
+                            onEmailChanged: (value) => setState(() {
+                              _emailVehicleDataTrue = value;
+                            }),
+                            nomeCliente: _nomeVehicleDataTrue,
+                            email: _emailVehicleDataTrue,
+                            celular: _contatoVehicleDataTrue,
+                          ),
                         ],
 // ------------------------------------------------Body/Mobile
                         if (!isTablet) ...[
@@ -191,14 +201,14 @@ class BarraHistoricoVeiculo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 150,
       width: double.infinity,
       child: Row(
         children: [
           Flexible(
             flex: 2,
-            child: Container(
+            child: SizedBox(
               height: double.infinity,
               width: double.infinity,
               child: Column(
@@ -210,7 +220,7 @@ class BarraHistoricoVeiculo extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage('assets/img/placaTrue.png'),
-                        fit: BoxFit.contain,
+                        // fit: BoxFit.contain,
                       ),
                     ),
                     child: Center(
@@ -244,7 +254,7 @@ class BarraHistoricoVeiculo extends StatelessWidget {
           ),
           Flexible(
             flex: 3,
-            child: Container(
+            child: SizedBox(
               height: double.infinity,
               width: double.infinity,
               child: Column(
@@ -254,25 +264,12 @@ class BarraHistoricoVeiculo extends StatelessWidget {
                   Text(
                     "$nomeClienteTrue",
                     style: TextStyle(
-                      fontSize: 15,
-                      fontFamily: 'Manrope',
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Container(
-                    height: 3,
-                  ),
-                  Text(
-                    "$modeloClienteTrue",
-                    style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 18,
                       fontFamily: 'Manrope',
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Container(
-                    height: 3,
-                  ),
+                  Container(height: 3),
                   Row(
                     children: [
                       Text(
@@ -283,9 +280,7 @@ class BarraHistoricoVeiculo extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      Container(
-                        width: 3,
-                      ),
+                      Container(width: 3),
                       Text(
                         "$emailClienteTrue",
                         style: TextStyle(
@@ -296,9 +291,7 @@ class BarraHistoricoVeiculo extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Container(
-                    height: 3,
-                  ),
+                  Container(height: 3),
                   Row(
                     children: [
                       Text(
@@ -328,7 +321,7 @@ class BarraHistoricoVeiculo extends StatelessWidget {
           ),
           Flexible(
             flex: 2,
-            child: Container(
+            child: SizedBox(
               height: double.infinity,
               width: double.infinity,
               child: Column(
@@ -384,6 +377,7 @@ final TextEditingController emailController = TextEditingController();
 
 final TextEditingController marcaTextController = TextEditingController();
 final TextEditingController anoTextController = TextEditingController();
+final TextEditingController combustivelTextController = TextEditingController();
 final TextEditingController modeloTextController = TextEditingController();
 final TextEditingController corTextController = TextEditingController();
 final TextEditingController kilometragemTextController =
@@ -392,7 +386,23 @@ final TextEditingController kilometragemTextController =
 Gasolina? gasolinaSelecionada;
 
 class FormularioDeEntradaPostVeiculo extends StatelessWidget {
-  FormularioDeEntradaPostVeiculo({Key? key}) : super(key: key);
+  final Function(String) onNameChanged;
+  final Function(String) onCellChanged;
+  final Function(String) onEmailChanged;
+
+  final String? nomeCliente;
+  final String? celular;
+  final String? email;
+
+  FormularioDeEntradaPostVeiculo({
+    Key? key,
+    required this.onNameChanged,
+    required this.onCellChanged,
+    required this.onEmailChanged,
+    required this.nomeCliente,
+    required this.email,
+    required this.celular,
+  }) : super(key: key);
   final preferences = SharedPreferences.getInstance();
 
   @override
@@ -404,7 +414,7 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
           Form(
             child: Column(
               children: [
-                Container(
+                SizedBox(
                   width: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -528,7 +538,11 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                 Container(
                   height: 40,
                 ),
-                _DadosDoCliente(),
+                _DadosDoCliente(
+                  onNameChanged: onNameChanged,
+                  onCellChanged: onCellChanged,
+                  onEmailChanged: onEmailChanged,
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 50, 0, 50),
                   child: Row(
@@ -545,7 +559,7 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                                   style: ElevatedButton.styleFrom(
                                     primary: Color.fromARGB(255, 255, 255, 255),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () => Navigator.of(context).pop(),
                                   child: Padding(
                                     padding:
                                         EdgeInsets.fromLTRB(24, 11, 24, 11),
@@ -576,20 +590,25 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                                 var result = await locator
                                     .get<AddOrderController>()
                                     .onCreateNewOrder(
-                                      nomeCompletoController.text,
-                                      cpfController.text,
-                                      celularController.text,
-                                      emailController.text,
-                                      '${anoTextController.text}-${gasolinaSelecionada?.code}',
-                                      corTextController.text,
-                                      _licensePlate,
-                                      kilometragemTextController.text,
-                                    );
+                                        nomeCompletoController.text,
+                                        cpfController.text,
+                                        celularController.text,
+                                        emailController.text,
+                                        '${anoTextController.text}-${gasolinaSelecionada?.code}',
+                                        corTextController.text,
+                                        _licensePlate,
+                                        kilometragemTextController.text,
+                                        int.parse(
+                                            combustivelTextController.text));
                                 if (result) {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => VehicleData()),
+                                        builder: (context) => VehicleData(
+                                              nomeCliente: nomeCliente,
+                                              email: email,
+                                              celular: celular,
+                                            )),
                                   );
                                 }
                               },
@@ -651,12 +670,17 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
     );
   }
 
+  Widget _combustivelTextFormField() {
+    return TextFormField(
+      controller: combustivelTextController,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+
   Widget _corTextFormField() {
     return TextFormField(
+      controller: corTextController,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      style: const TextStyle(
-        fontSize: 12,
-      ),
     );
   }
 
@@ -668,19 +692,26 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
   }
 }
 
-class Gasolina {
-  final String code;
-  final String nome;
+class _DadosDoCliente extends StatefulWidget {
+  final Function(String) onNameChanged;
+  final Function(String) onCellChanged;
+  final Function(String) onEmailChanged;
 
-  Gasolina(this.code, this.nome);
-}
-
-class _DadosDoCliente extends StatelessWidget {
-  _DadosDoCliente({Key? key}) : super(key: key);
+  const _DadosDoCliente({
+    Key? key,
+    required this.onNameChanged,
+    required this.onCellChanged,
+    required this.onEmailChanged,
+  }) : super(key: key);
 
   @override
+  State<_DadosDoCliente> createState() => _DadosDoClienteState();
+}
+
+class _DadosDoClienteState extends State<_DadosDoCliente> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -717,7 +748,7 @@ class _DadosDoCliente extends StatelessWidget {
                           color: Color.fromARGB(255, 0, 0, 0),
                         ),
                       ),
-                      _nomeCompletoTextField(),
+                      _nomeCompletoTextField(widget.onNameChanged),
                       Text(
                         "Celular",
                         style: TextStyle(
@@ -727,7 +758,7 @@ class _DadosDoCliente extends StatelessWidget {
                           color: Color.fromARGB(255, 0, 0, 0),
                         ),
                       ),
-                      _celularTextField(),
+                      _celularTextField(widget.onCellChanged),
                     ],
                   ),
                 ),
@@ -771,7 +802,7 @@ class _DadosDoCliente extends StatelessWidget {
                           color: Color.fromARGB(255, 0, 0, 0),
                         ),
                       ),
-                      _emailTextField(),
+                      _emailTextField(widget.onEmailChanged),
                     ],
                   ),
                 ),
@@ -783,9 +814,14 @@ class _DadosDoCliente extends StatelessWidget {
     );
   }
 
-  Widget _nomeCompletoTextField() {
+  Widget _nomeCompletoTextField(Function(String) onNameChanged) {
     return TextFormField(
       controller: nomeCompletoController,
+      onChanged: (value) {
+        setState(() {
+          onNameChanged(nomeCompletoController.text);
+        });
+      },
       autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
@@ -797,17 +833,34 @@ class _DadosDoCliente extends StatelessWidget {
     );
   }
 
-  Widget _celularTextField() {
+  Widget _celularTextField(Function(String) onCellChanged) {
     return TextFormField(
       controller: celularController,
+      onChanged: (value) {
+        setState(() {
+          onCellChanged(celularController.text);
+        });
+      },
       autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 
-  Widget _emailTextField() {
+  Widget _emailTextField(Function(String) onEmailChanged) {
     return TextFormField(
       controller: emailController,
+      onChanged: (value) {
+        setState(() {
+          onEmailChanged(emailController.text);
+        });
+      },
       autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
+}
+
+class Gasolina {
+  final String code;
+  final String nome;
+
+  Gasolina(this.code, this.nome);
 }

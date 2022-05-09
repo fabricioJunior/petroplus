@@ -1,21 +1,24 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
-import 'package:petroplus/errors/http_client_error_handler.dart';
-import 'package:petroplus/models/produtcs.dart';
+import 'package:petroplus/errors/excepions.dart';
+import 'package:petroplus/models/products_model.dart';
 
-import '../errors/excepions.dart';
+import '../errors/http_client_error_handler.dart';
 
-class RecommedationsRepository {
+class RecommendationRepository {
   final Dio _client;
 
-  RecommedationsRepository(this._client);
+  RecommendationRepository(this._client);
 
-  Future<Produtcs> recommendations() async {
+  Future<ProductsModel> getRecommendations() async {
     try {
       Response response = await _client.get(
         'products?recommendations=true',
       );
-      return Produtcs.fromJson(response.data);
+      final result = ProductsModel.fromJson(response.data);
+      return result;
     } on DioError catch (e) {
       throw getHttpClientException(e);
     } on PlatformException {

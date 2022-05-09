@@ -38,7 +38,7 @@ class ReceptionChecklist extends StatelessWidget {
                           ReceptionChecklistsTablet(),
                           InspectionServiceTablet(),
                           DivschelistReceptionVehiclesTableTablet(),
-                          chelistReceptionVehiclesTableTablet(),
+                          ChelistReceptionVehiclesTableTablet(),
                         ],
 // ------------------------------------------------Body/Mobile
                         if (!isTablet) ...[

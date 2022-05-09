@@ -1,5 +1,5 @@
-class Item {
-  Item({
+class ItemModel {
+  ItemModel({
     this.createdAt,
     this.updatedAt,
     this.id,
@@ -17,15 +17,15 @@ class Item {
   DateTime? updatedAt;
   String? id;
   String? name;
-  int? quantity;
+  num? quantity;
   String? internalId;
-  int? price;
+  String? price;
   String? description;
   bool? isRecommendation;
   String? clientId;
   DateTime? deletedAt;
 
-  factory Item.fromJson(Map<String, dynamic> json) => Item(
+  factory ItemModel.fromJson(Map<String, dynamic> json) => ItemModel(
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         id: json["id"],
@@ -36,7 +36,7 @@ class Item {
         description: json["description"],
         isRecommendation: json["is_recommendation"],
         clientId: json["client_id"],
-        deletedAt: DateTime.parse(json["deleted_at"]),
+        deletedAt: json["deleted_at"] != null ?  DateTime.parse(json["deleted_at"]) : null,
       );
 
   Map<String, dynamic> toJson() => {

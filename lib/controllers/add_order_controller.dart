@@ -3,7 +3,6 @@ import 'package:petroplus/models/order_model.dart';
 import '../alerts/alerts.dart';
 import '../errors/excepions.dart';
 
-import '../models/vehicle_model.dart';
 import '../repositories/order_repository.dart';
 
 class AddOrderController {
@@ -32,6 +31,7 @@ class AddOrderController {
     String cor,
     String placa,
     String quilometragem,
+    int combustivel,
   ) async {
     try {
       OrderModel? newOrder = OrderModel(

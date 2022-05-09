@@ -1,21 +1,28 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:petroplus/controllers/recommendation_controller.dart';
+import 'package:petroplus/models/products_model.dart';
+import 'package:petroplus/models/service_model.dart';
+import 'package:petroplus/pages/delivery_audit/delivery_audit_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../widgets/appbar_uni_widget.dart';
 import 'package:http/http.dart' as http;
 
+import '../../controllers/service_controller.dart';
+import '../../service_locator.dart';
 import '../drawer_menu.dart/navigation_drawer_menu.dart';
 
 class AnaliseVeiculoRotaMap {}
 
 class ServiceMenuPage extends StatefulWidget {
-  ServiceMenuPage({Key? key}) : super(key: key);
+  const ServiceMenuPage({Key? key}) : super(key: key);
 
   @override
   State<ServiceMenuPage> createState() => _ServiceMenuPageState();
 }
 
 class _ServiceMenuPageState extends State<ServiceMenuPage> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +36,7 @@ class _ServiceMenuPageState extends State<ServiceMenuPage> {
             // ----------------------
 
             Center(
-              child: Container(
+              child: SizedBox(
                 // width: MediaQuery.of(context).size.width * .9,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
@@ -75,7 +82,7 @@ class PacotesParaModelo extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
             child: Row(
-              children: [
+              children: const [
                 Icon(
                   Icons.arrow_back_ios,
                   size: 14,
@@ -95,7 +102,7 @@ class PacotesParaModelo extends StatelessWidget {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: const [
               Text(
                 "Pacotes para Model 3 (10.000KM)",
                 style: TextStyle(
@@ -227,6 +234,13 @@ class MyWidget extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<MyWidget> {
+
+  var _recommendationLength = 0;
+  var _serviceLength = 0;
+  
+  var _isRecommendationLengthUpdated = false;
+  var _isServiceLengthUpdated = false;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -247,6 +261,75 @@ class _MyWidgetState extends State<MyWidget> {
                   color: Color.fromARGB(255, 231, 231, 231),
                 ),
               ),
+             PacoteTile(
+                titleProduct: 'Troca de Oléo ',
+                titleProductSubtitle:
+                    '2.7l de Oléo Selenia 5w30 - 1h30 de Mão de Obra',
+                precoProduto: r'R$ 230,00',
+                linkProdutoAcesso: () {},
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 30,
+              ),
+              Text("Recomendados ($_recommendationLength)"),
+              Container(
+                width: double.infinity,
+                height: 1,
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 231, 231, 231),
+                ),
+              ),
+              FutureBuilder<ProductsModel>(
+                future: locator.get<RecommendationController>().getRecommendations(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  if (snapshot.hasData) {
+
+                    final productsModel = snapshot.data;
+                    _setRecommendationLengthAfterLayout(productsModel!.itemsModel!.length);
+
+                    return Column(
+                      children: List.generate(
+                        productsModel.itemsModel!.length, 
+                        (index) => PacoteTile(
+                          titleProduct: productsModel.itemsModel![index].name!,
+                          titleProductSubtitle: productsModel.itemsModel![index].description!,
+                          precoProduto: r'R$' '${productsModel.itemsModel![index].price}',
+                          linkProdutoAcesso: () {},
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Text("Nenhuma recomendação encontrada :(");
+                }
+              )
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 30,
+              ),
+              Text("Recall (2)"),
+              Container(
+                width: double.infinity,
+                height: 1,
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 231, 231, 231),
+                ),
+              ),
               PacoteTile(
                 titleProduct: 'Troca de Oléo ',
                 titleProductSubtitle:
@@ -262,7 +345,7 @@ class _MyWidgetState extends State<MyWidget> {
               Container(
                 height: 30,
               ),
-              Text("Recomendados  (3)"),
+              Text("Outros ($_serviceLength)"),
               Container(
                 width: double.infinity,
                 height: 1,
@@ -270,66 +353,36 @@ class _MyWidgetState extends State<MyWidget> {
                   color: Color.fromARGB(255, 231, 231, 231),
                 ),
               ),
-              PacoteTile(
-                titleProduct: 'Limpeza Completo do Sistema de Injeção',
-                titleProductSubtitle:
-                    '01 Aditivo Controlador Petroplus - 0h30 de Mão de Obra',
-                precoProduto: r'R$ 123,00',
-                linkProdutoAcesso: () {},
-              ),
-              PacoteTile(
-                titleProduct: 'Limpeza Completo do Sistema de Injeção',
-                titleProductSubtitle:
-                    '01 Aditivo Controlador Petroplus - 0h30 de Mão de Obra',
-                precoProduto: r'R$ 123,00',
-                linkProdutoAcesso: () {},
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 30,
-              ),
-              Text("Recall  (2)"),
-              Container(
-                width: double.infinity,
-                height: 1,
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 231, 231, 231),
-                ),
-              ),
-              PacoteTile(
-                titleProduct: 'Troca de Oléo ',
-                titleProductSubtitle:
-                    '2.7l de Oléo Selenia 5w30 - 1h30 de Mão de Obra',
-                precoProduto: r'R$ 230,00',
-                linkProdutoAcesso: () {},
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 30,
-              ),
-              Text("Outros  (1)"),
-              Container(
-                width: double.infinity,
-                height: 1,
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 231, 231, 231),
-                ),
-              ),
-              PacoteTile(
-                titleProduct: 'Troca de Oléo ',
-                titleProductSubtitle:
-                    '2.7l de Oléo Selenia 5w30 - 1h30 de Mão de Obra',
-                precoProduto: r'R$ 230,00',
-                linkProdutoAcesso: () {},
-              ),
+              FutureBuilder<ServiceModel>(
+                future: locator.get<ServiceController>().getServices(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  if (snapshot.hasData) {
+
+                    final servicesModel = snapshot.data;
+                    _setServiceLengthAfterLayout(servicesModel!.itemsModel!.length);
+
+                    return Column(
+                      children: List.generate(
+                        servicesModel.itemsModel!.length, 
+                        (index) => PacoteTile(
+                          titleProduct: servicesModel.itemsModel![index].name!,
+                          titleProductSubtitle: servicesModel.itemsModel![index].description!,
+                          precoProduto: r'R$' '${servicesModel.itemsModel![index].price}',
+                          linkProdutoAcesso: () {},
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Text("Nenhum serviço encontrada :(");
+                }
+              )
             ],
           ),
           Padding(
@@ -350,7 +403,13 @@ class _MyWidgetState extends State<MyWidget> {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(Color(0xffFF6601)),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) {
+                  return DeliveryAuditPage();
+                },
+              ));
+            },
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: Text(
@@ -367,7 +426,27 @@ class _MyWidgetState extends State<MyWidget> {
       ),
     );
   }
+
+  void _setRecommendationLengthAfterLayout(int value) {
+    if (!_isRecommendationLengthUpdated) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        setState(() => _recommendationLength = value);
+        _isRecommendationLengthUpdated = true;
+      });
+    }
+  }
+
+  void _setServiceLengthAfterLayout(int value) {
+    if (!_isServiceLengthUpdated) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        setState(() => _serviceLength = value);
+        _isServiceLengthUpdated = true;
+      });
+    }
+  }
+
 }
+
 
 class PacoteTile extends StatefulWidget {
   const PacoteTile(

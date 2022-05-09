@@ -1,130 +1,127 @@
 import 'package:flutter/material.dart';
-import '../../../service_locator.dart';
 
+import '../../../controllers/x_order/x_order_controler.dart';
+import '../../../service_locator.dart';
 import '../../../widgets/vehicle_history_table_widget.dart';
 import '../../dashboard_page/controles/x_order_state.dart';
-import '../../../controllers/x_order/x_order_controler.dart';
 import 'vehicle_details_dialog.dart';
 
 //String inspecionar = "inspecionar";
 //String inspecionar = "Aguardando";
 String inspecionar = "Desistência";
 
-class chelistReceptionVehiclesTableTablet extends StatelessWidget {
-  chelistReceptionVehiclesTableTablet({Key? key}) : super(key: key);
+class ChelistReceptionVehiclesTableTablet extends StatelessWidget {
+  
+  final bool isAuditPage;
+  
+  const ChelistReceptionVehiclesTableTablet({
+    Key? key,
+    this.isAuditPage = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              flex: 4,
-              child: Center(
-                child: Text(
-                  'PLACA',
-                  style: TextStyle(
-                    color: Color.fromARGB(139, 46, 44, 52),
-                    fontSize: 12,
-                    fontFamily: 'Manrope',
-                    fontWeight: FontWeight.normal,
+    return Container(
+      height: 310,
+      color: Color.fromARGB(136, 255, 255, 255),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Flexible(
+                flex: 3,
+                child: Center(
+                  child: Text(
+                    'PLACA',
+                    style: TextStyle(
+                      color: Color.fromARGB(139, 46, 44, 52),
+                      fontSize: 14,
+                      fontFamily: 'Manrope',
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Flexible(
-              flex: 4,
-              child: Center(
-                child: Text(
-                  'CLIENTE',
-                  style: TextStyle(
-                    color: Color.fromARGB(139, 46, 44, 52),
-                    fontSize: 12,
-                    fontFamily: 'Manrope',
-                    fontWeight: FontWeight.normal,
+              Flexible(
+                flex: 5,
+                child: Center(
+                  child: Text(
+                    'VEÍCULO',
+                    style: TextStyle(
+                      color: Color.fromARGB(139, 46, 44, 52),
+                      fontSize: 14,
+                      fontFamily: 'Manrope',
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Flexible(
-              flex: 5,
-              child: Center(
-                child: Text(
-                  'MARCA/MODELO',
-                  style: TextStyle(
-                    color: Color.fromARGB(139, 46, 44, 52),
-                    fontSize: 12,
-                    fontFamily: 'Manrope',
-                    fontWeight: FontWeight.normal,
+              Flexible(
+                flex: 4,
+                child: Center(
+                  child: Text(
+                    'DATA',
+                    style: TextStyle(
+                      color: Color.fromARGB(139, 46, 44, 52),
+                      fontSize: 14,
+                      fontFamily: 'Manrope',
+                      fontWeight: FontWeight.normal,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Flexible(
-              flex: 5,
-              child: Center(
-                child: Text(
-                  'DATA AGENDADO',
-                  style: TextStyle(
-                    color: Color.fromARGB(139, 46, 44, 52),
-                    fontSize: 12,
-                    fontFamily: 'Manrope',
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-            Flexible(
-              flex: 5,
-              child: Center(
-                child: Text(
-                  'STATUS',
-                  style: TextStyle(
-                    color: Color.fromARGB(139, 46, 44, 52),
-                    fontSize: 12,
-                    fontFamily: 'Manrope',
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Container(
-          width: double.maxFinite,
-          height: 600,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border:
-                Border.all(width: 2, color: Color.fromRGBO(235, 234, 237, 1)),
-            color: Color.fromARGB(255, 235, 235, 235),
-          ),
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            children: [
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
-              WidgetConteudoVeiculoCheclist(),
             ],
           ),
-        ),
-      ],
+          Container(
+            width: double.maxFinite,
+            height: 290,
+            color: Color.fromARGB(255, 255, 255, 255),
+            // --------------------Inicio Loop Back
+            child: ValueListenableBuilder<StateTodo>(
+              valueListenable: locator.get<XOrderController>(),
+              builder: (context, value, _) {
+                final state = value;
+                if (state is StateTodoLoading) {
+                  return Center(
+                      child: CircularProgressIndicator());
+                }
+                if (state is StateTodoSuccess) {
+                  return ListView.builder(
+                      itemCount: state.todoSuccess.length,
+                      itemBuilder: (context, indice) {
+                        return Column(
+                          children: [
+                            Container(
+                              height: 5,
+                            ),
+                            ConteudoVeiculoDashboard(
+                              placaVeiculo: (state
+                                      .todoSuccess[indice]
+                                      .license_plate ??
+                                  ""),
+                              modeloVeiculo: (state
+                                  .todoSuccess[indice]
+                                  .customer_name),
+                              dataVeiculo: (state
+                                  .todoSuccess[indice].status),
+                            ),
+                            Container(
+                              height: 5,
+                            ),
+                          ],
+                        );
+                      });
+                }
+                if (state is StateTodoError) {
+                  return Center(child: Text(state.todoError));
+                }
+                return Container();
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -134,8 +131,7 @@ class ChelistReceptionVehiclesTableMobile extends StatefulWidget {
   const ChelistReceptionVehiclesTableMobile({Key? key, this.isAuditPage = false}) : super(key: key);
 
   @override
-  State<ChelistReceptionVehiclesTableMobile> createState() =>
-      _ChelistReceptionVehiclesTableMobileState();
+  State<ChelistReceptionVehiclesTableMobile> createState() => _ChelistReceptionVehiclesTableMobileState();
 }
 
 class _ChelistReceptionVehiclesTableMobileState

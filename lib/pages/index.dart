@@ -208,10 +208,10 @@ class _HomeSplashState extends State<HomeSplash> {
       password: _senhaImputController.text),
     );
 
-    final preferences = await SharedPreferences.getInstance();
-    final token = preferences.getString("token");
+    // final preferences = await SharedPreferences.getInstance();
+    // final token = preferences.getString("token");
 
-    log(token ?? '', error: 'TOKEN INVÁLIDO');
+    // log(token ?? '', error: 'TOKEN INVÁLIDO');
 
     if (savedToken) {
       Navigator.of(context).pushReplacement(
