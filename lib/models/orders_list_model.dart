@@ -7,10 +7,13 @@ class OrdersListModel extends Equatable {
   const OrdersListModel(this.orders);
 
   OrdersListModel.fromJson(Map<String, dynamic> json)
-      : orders = json['items'].map<OrderModel>((e) => OrderModel.fromJson(e)).toList();
+      : orders = json['items']
+            .map<OrderModel>((e) => OrderModel.fromJson(e))
+            .toList();
 
   OrderModel? getByLiscencePlate(String licensePlate) {
-    var busca = orders.where((order) => order.licensePlate == licensePlate);
+    var busca = orders.where(
+        (order) => order.licensePlate?.replaceAll(' ', '') == licensePlate);
     if (busca.isNotEmpty) {
       return busca.first;
     }

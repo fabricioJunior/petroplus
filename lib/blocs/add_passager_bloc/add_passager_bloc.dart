@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:petroplus/models/customers.dart';
+import 'package:petroplus/repositories/customers_repository.dart';
 import '../../models/order_model.dart';
 
 import '../../repositories/order_repository.dart';
@@ -10,8 +12,10 @@ part 'add_passager_state.dart';
 
 class AddPassangerBloc extends Bloc<AddPassagerEvent, AddPassagerState> {
   final OrderRepository orderRepository;
+  final CustomersRepository customersRepository;
 
-  AddPassangerBloc(this.orderRepository) : super(AddPassagerInitial()) {
+  AddPassangerBloc(this.orderRepository, this.customersRepository)
+      : super(AddPassagerInitial()) {
     on<AddPassagerStarted>(_onAddPassagerStarted);
     on<AddPassagerCheckedOrderByLicensePlate>(
       _onAddPassagerCheckedOrderByLicensePlate,
@@ -24,8 +28,8 @@ class AddPassangerBloc extends Bloc<AddPassagerEvent, AddPassagerState> {
   ) async {
     emit(AddPassagerLoadInProgress());
     try {
-      await orderRepository.getAll();
-      emit(AddPassagerLoadSucess());
+      var customers = await customersRepository.customers();
+      emit(AddPassagerLoadSucess(customers));
     } catch (e) {
       emit(AddPassagerLoadError());
     }
@@ -37,7 +41,8 @@ class AddPassangerBloc extends Bloc<AddPassagerEvent, AddPassagerState> {
   ) async {
     emit(AddPassagerCheckOrderByLicensePlateInProgress());
     try {
-      OrderModel? order = await orderRepository.getOrderByLicensePlate(event.licensePlate);
+      OrderModel? order =
+          await orderRepository.getOrderByLicensePlate(event.licensePlate);
       emit(AddPassagerCheckOrderByLicensePlateSucess(order != null));
     } catch (e) {
       emit(AddPassagerCheckOrderByLicensePlateErro());

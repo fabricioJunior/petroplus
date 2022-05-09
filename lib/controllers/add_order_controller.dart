@@ -39,7 +39,7 @@ class AddOrderController {
         customerDocument: cpf,
         phoneNumber: telefone,
         email: email,
-        vehicleYear: '$anoVeiculo-1',
+        vehicleYear: anoVeiculo,
         vehicleColor: cor,
         licensePlate: placa,
         mileage: quilometragem,

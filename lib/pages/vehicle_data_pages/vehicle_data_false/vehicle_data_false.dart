@@ -389,6 +389,8 @@ final TextEditingController corTextController = TextEditingController();
 final TextEditingController kilometragemTextController =
     TextEditingController();
 
+Gasolina? gasolinaSelecionada;
+
 class FormularioDeEntradaPostVeiculo extends StatelessWidget {
   FormularioDeEntradaPostVeiculo({Key? key}) : super(key: key);
   final preferences = SharedPreferences.getInstance();
@@ -450,6 +452,16 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                                     ),
                                   ),
                                   _anoTextFormField(),
+                                  Text(
+                                    "Combustível",
+                                    style: TextStyle(
+                                      fontFamily: 'Manrope',
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 15,
+                                      color: Color.fromARGB(255, 0, 0, 0),
+                                    ),
+                                  ),
+                                  _gasolinaSelect(),
                                 ],
                               ),
                             ),
@@ -568,7 +580,7 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                                       cpfController.text,
                                       celularController.text,
                                       emailController.text,
-                                      anoTextController.text,
+                                      '${anoTextController.text}-${gasolinaSelecionada?.code}',
                                       corTextController.text,
                                       _licensePlate,
                                       kilometragemTextController.text,
@@ -619,6 +631,19 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
     );
   }
 
+  Widget _gasolinaSelect() {
+    return DropdownButton<Gasolina>(
+        items: [
+          DropdownMenuItem<Gasolina>(
+              value: Gasolina('1', 'Gasolina'), child: Text('Gasolina')),
+          DropdownMenuItem<Gasolina>(
+              value: Gasolina('2', 'Alcool'), child: Text('Alcool'))
+        ],
+        onChanged: (gasolina) {
+          gasolinaSelecionada = gasolina;
+        });
+  }
+
   Widget _anoTextFormField() {
     return TextFormField(
       controller: anoTextController,
@@ -641,6 +666,13 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
       autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
+}
+
+class Gasolina {
+  final String code;
+  final String nome;
+
+  Gasolina(this.code, this.nome);
 }
 
 class _DadosDoCliente extends StatelessWidget {

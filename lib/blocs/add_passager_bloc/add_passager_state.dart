@@ -6,7 +6,11 @@ class AddPassagerInitial extends AddPassagerState {}
 
 class AddPassagerLoadInProgress extends AddPassagerState {}
 
-class AddPassagerLoadSucess extends AddPassagerState {}
+class AddPassagerLoadSucess extends AddPassagerState {
+  final Customers customers;
+
+  AddPassagerLoadSucess(this.customers);
+}
 
 class AddPassagerLoadError extends AddPassagerState {}
 
