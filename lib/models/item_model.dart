@@ -26,8 +26,8 @@ class ItemModel {
   DateTime? deletedAt;
 
   factory ItemModel.fromJson(Map<String, dynamic> json) => ItemModel(
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
+        createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"]) : null,
+        updatedAt: json["updated_at"] != null ? DateTime.parse(json["updated_at"]) : null,
         id: json["id"],
         name: json["name"],
         quantity: json["quantity"],

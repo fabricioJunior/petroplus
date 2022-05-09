@@ -226,6 +226,15 @@ class PacotesParaModelo extends StatelessWidget {
   }
 }
 
+Widget _buildCircularProgress() {
+  return Center(
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(0, 16, 0, 8),
+      child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Color(0xffff6601))),
+    ),
+  );
+}
+
 // final Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
 class MyWidget extends StatefulWidget {
@@ -254,13 +263,7 @@ class _MyWidgetState extends State<MyWidget> {
                 height: 30,
               ),
               Text("Inclusos no Pacote (1)"),
-              Container(
-                width: double.infinity,
-                height: 1,
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 231, 231, 231),
-                ),
-              ),
+              Divider(),
              PacoteTile(
                 titleProduct: 'Troca de Oléo ',
                 titleProductSubtitle:
@@ -277,20 +280,12 @@ class _MyWidgetState extends State<MyWidget> {
                 height: 30,
               ),
               Text("Recomendados ($_recommendationLength)"),
-              Container(
-                width: double.infinity,
-                height: 1,
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 231, 231, 231),
-                ),
-              ),
+              Divider(),
               FutureBuilder<ProductsModel>(
                 future: locator.get<RecommendationController>().getRecommendations(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return _buildCircularProgress();
                   }
 
                   if (snapshot.hasData) {
@@ -305,7 +300,9 @@ class _MyWidgetState extends State<MyWidget> {
                           titleProduct: productsModel.itemsModel![index].name!,
                           titleProductSubtitle: productsModel.itemsModel![index].description!,
                           precoProduto: r'R$' '${productsModel.itemsModel![index].price}',
-                          linkProdutoAcesso: () {},
+                          linkProdutoAcesso: () {
+                            showAboutDialog(context: context);
+                          },
                         ),
                       ),
                     );
@@ -323,13 +320,7 @@ class _MyWidgetState extends State<MyWidget> {
                 height: 30,
               ),
               Text("Recall (2)"),
-              Container(
-                width: double.infinity,
-                height: 1,
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 231, 231, 231),
-                ),
-              ),
+              Divider(),
               PacoteTile(
                 titleProduct: 'Troca de Oléo ',
                 titleProductSubtitle:
@@ -346,20 +337,12 @@ class _MyWidgetState extends State<MyWidget> {
                 height: 30,
               ),
               Text("Outros ($_serviceLength)"),
-              Container(
-                width: double.infinity,
-                height: 1,
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 231, 231, 231),
-                ),
-              ),
+              Divider(),
               FutureBuilder<ServiceModel>(
                 future: locator.get<ServiceController>().getServices(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return _buildCircularProgress();
                   }
 
                   if (snapshot.hasData) {
@@ -371,10 +354,12 @@ class _MyWidgetState extends State<MyWidget> {
                       children: List.generate(
                         servicesModel.itemsModel!.length, 
                         (index) => PacoteTile(
-                          titleProduct: servicesModel.itemsModel![index].name!,
-                          titleProductSubtitle: servicesModel.itemsModel![index].description!,
-                          precoProduto: r'R$' '${servicesModel.itemsModel![index].price}',
-                          linkProdutoAcesso: () {},
+                          titleProduct: servicesModel.itemsModel?[index].name ?? 'Título Produto',
+                          titleProductSubtitle: servicesModel.itemsModel?[index].description ?? 'Descrição Produto',
+                          precoProduto: r'R$' '${servicesModel.itemsModel?[index].price ?? 'Preço'}',
+                          linkProdutoAcesso: () {
+                            showAboutDialog(context: context);
+                          },
                         ),
                       ),
                     );

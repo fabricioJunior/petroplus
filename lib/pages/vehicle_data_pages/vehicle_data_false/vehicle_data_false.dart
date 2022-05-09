@@ -153,6 +153,7 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
                             nomeCliente: _nomeVehicleDataTrue,
                             email: _emailVehicleDataTrue,
                             celular: _contatoVehicleDataTrue,
+                            placaCliente: widget.licensePlate,
                           ),
                         ],
 // ------------------------------------------------Body/Mobile
@@ -385,6 +386,7 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
 
   final String? nomeCliente;
   final String? celular;
+  final String? placaCliente;
   final String? email;
 
   FormularioDeEntradaPostVeiculo({
@@ -395,6 +397,7 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
     required this.nomeCliente,
     required this.email,
     required this.celular,
+    required this.placaCliente
   }) : super(key: key);
   final preferences = SharedPreferences.getInstance();
 
@@ -598,6 +601,7 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                                       nomeCliente: nomeCliente,
                                       email: email,
                                       celular: celular,
+                                      placaCliente: placaCliente,
                                     )),
                                   );
                                 }

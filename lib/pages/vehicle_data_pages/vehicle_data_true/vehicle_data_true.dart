@@ -16,12 +16,14 @@ class VehicleData extends StatefulWidget {
   final String? nomeCliente;
   final String? email;
   final String? celular;
+  final String? placaCliente;
 
   const VehicleData({
     Key? key,
     this.nomeCliente,
     this.email,
     this.celular,
+    this.placaCliente,
   }) : super(key: key);
 
   @override
@@ -117,7 +119,7 @@ class _VehicleDataState extends State<VehicleData> {
                             emailClienteTrue: widget.email ?? "Email não cadastrado",
                             modeloClienteTrue: _modeloVehicleDataTrue ?? "Modelo não cadastrado",
                             nomeClienteTrue: widget.nomeCliente ?? "Nome não cadastrado",
-                            placaClienteTrue: _placaVehicleDataTrue,
+                            placaClienteTrue: widget.placaCliente ?? _placaVehicleDataTrue,
                             statusClienteTrue: _statusVehicleDataTrue ??
                                 " Status não cadastrado",
                           ),
@@ -185,7 +187,8 @@ class _VehicleDataState extends State<VehicleData> {
                                                     return EndReceptionPage(
                                                       nomeCliente: widget.nomeCliente,
                                                       email: widget.email,
-                                                      celular: widget.celular
+                                                      celular: widget.celular,
+                                                      placaCliente: widget.placaCliente,
                                                     );
                                                   }
                                                 ),
