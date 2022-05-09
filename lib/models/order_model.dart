@@ -54,6 +54,10 @@ class OrderModel extends StorageEntity {
         mileage: json["mileage"],
       );
 
+  static List<OrderModel> getList(dynamic map) {
+    return List.from(map).map((e) => OrderModel.fromJson(e)).toList();
+  } 
+
   OrderModel.fromStorage(Map<String, dynamic> props)
       : licensePlate = props['licensePlate'];
 
@@ -75,4 +79,23 @@ class OrderModel extends StorageEntity {
 
   @override
   Map<String, dynamic> get storageProperties => throw UnimplementedError();
+
+  @override
+  String toString() {
+    return """
+      $customerId,
+      $customerVehicleId,
+      $customerName,
+      $customerDocument,
+      $phoneNumber,
+      $email,
+      $vehicleMakerId,
+      $vehicleModelId,
+      $vehicleYear,
+      $vehicleColor,
+      $clientId,
+      $licensePlate,
+      $mileage,
+""";
+  }
 }

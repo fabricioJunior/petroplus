@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
-import 'package:petroplus/models/user_model.dart';
 import '../adapters/cache/order_store.dart';
 import '../errors/excepions.dart';
 import '../models/orders_list_model.dart';

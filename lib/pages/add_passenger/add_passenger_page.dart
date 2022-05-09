@@ -175,7 +175,7 @@ class AddPassenger extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 primary: Color.fromARGB(255, 255, 81, 0),
                               ),
-                              onPressed: () async {
+                                onPressed: () async {
                                 var order = await locator
                                     .get<OrderRepository>()
                                     .getOrderByLicensePlate(
@@ -185,7 +185,11 @@ class AddPassenger extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => VehicleData()),
+                                        builder: (context) => VehicleData(
+                                          nomeCliente: order.customerName,
+                                          celular: order.phoneNumber,
+                                          email: order.email,
+                                        )),
                                   );
                                 } else {
                                   Navigator.push(

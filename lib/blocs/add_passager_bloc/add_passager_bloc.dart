@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../models/order_model.dart';
+import 'package:petroplus/models/order_model.dart';
 
 import '../../repositories/order_repository.dart';
 

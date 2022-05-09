@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../pages/delivery_audit/delivery_audit_page.dart';
-import '../../pages/finalize budget_page/finalize_budget_page.dart';
+import '../../pages/finalize_budget_page/finalize_budget_page.dart';
 import '../../pages/index.dart';
 import '../../pages/model_vehicle/model_vehicle_page.dart';
 import '../../pages/service_menu_page/service_menu_page.dart';
 
-class Splach extends StatefulWidget {
-  const Splach({Key? key}) : super(key: key);
+class Splash extends StatefulWidget {
+  const Splash({Key? key}) : super(key: key);
 
   @override
-  State<Splach> createState() => _SplachState();
+  State<Splash> createState() => _SplashState();
 }
 
-class _SplachState extends State<Splach> {
+class _SplashState extends State<Splash> {
   @override
   // ignore: must_call_super
   void initState() {
@@ -22,8 +22,8 @@ class _SplachState extends State<Splach> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return FinalizeBudgetPage();
-            //return HomeSplash();
+            // return FinalizeBudgetPage();
+            return HomeSplash();
           },
         ),
         (route) => false,

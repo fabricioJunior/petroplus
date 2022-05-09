@@ -17,9 +17,9 @@ class ItemModel {
   DateTime? updatedAt;
   String? id;
   String? name;
-  int? quantity;
+  num? quantity;
   String? internalId;
-  int? price;
+  String? price;
   String? description;
   bool? isRecommendation;
   String? clientId;
@@ -36,7 +36,7 @@ class ItemModel {
         description: json["description"],
         isRecommendation: json["is_recommendation"],
         clientId: json["client_id"],
-        deletedAt: DateTime.parse(json["deleted_at"]),
+        deletedAt: json["deleted_at"] != null ?  DateTime.parse(json["deleted_at"]) : null,
       );
 
   Map<String, dynamic> toJson() => {

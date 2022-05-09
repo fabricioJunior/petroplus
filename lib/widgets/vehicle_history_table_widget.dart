@@ -48,7 +48,7 @@ class _IncomingAppointmentsTabletState
                         children: [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
+                            children: const [
                               Text(
                                 'Agendamentos de entrada',
                                 style: TextStyle(
@@ -72,7 +72,7 @@ class _IncomingAppointmentsTabletState
                           Column(
                             children: [
                               Row(
-                                children: [
+                                children: const [
                                   Icon(
                                     Icons.autorenew_outlined,
                                     color: Color.fromARGB(255, 73, 73, 73),
@@ -101,7 +101,7 @@ class _IncomingAppointmentsTabletState
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
+                            children: const [
                               Flexible(
                                 flex: 3,
                                 child: Center(

@@ -7,11 +7,11 @@ class MetaModel {
     this.currentPage,
   });
 
-  int? totalItems;
-  int? itemCount;
-  int? itemsPerPage;
-  int? totalPages;
-  int? currentPage;
+  num? totalItems;
+  num? itemCount;
+  num? itemsPerPage;
+  num? totalPages;
+  num? currentPage;
 
   factory MetaModel.fromJson(Map<String, dynamic> json) => MetaModel(
         totalItems: json["totalItems"],

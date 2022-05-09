@@ -149,7 +149,10 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
                           FormularioDeEntradaPostVeiculo(
                             onCellChanged: (value) => setState(() { _contatoVehicleDataTrue = value; }),
                             onNameChanged: (value) => setState(() { _nomeVehicleDataTrue = value; }),
-                            onEmailChanged: (value) => setState(() { _emailVehicleDataTrue = value; })
+                            onEmailChanged: (value) => setState(() { _emailVehicleDataTrue = value; }),
+                            nomeCliente: _nomeVehicleDataTrue,
+                            email: _emailVehicleDataTrue,
+                            celular: _contatoVehicleDataTrue,
                           ),
                         ],
 // ------------------------------------------------Body/Mobile
@@ -255,7 +258,7 @@ class BarraHistoricoVeiculo extends StatelessWidget {
                   Text(
                     "$nomeClienteTrue",
                     style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 18,
                       fontFamily: 'Manrope',
                       fontWeight: FontWeight.w600,
                     ),
@@ -368,6 +371,7 @@ final TextEditingController emailController = TextEditingController();
 
 final TextEditingController marcaTextController = TextEditingController();
 final TextEditingController anoTextController = TextEditingController();
+final TextEditingController combustivelTextController = TextEditingController();
 final TextEditingController modeloTextController = TextEditingController();
 final TextEditingController corTextController = TextEditingController();
 final TextEditingController kilometragemTextController =
@@ -379,11 +383,18 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
   final Function(String) onCellChanged;
   final Function(String) onEmailChanged;
 
+  final String? nomeCliente;
+  final String? celular;
+  final String? email;
+
   FormularioDeEntradaPostVeiculo({
     Key? key,
     required this.onNameChanged,
     required this.onCellChanged,
     required this.onEmailChanged,
+    required this.nomeCliente,
+    required this.email,
+    required this.celular,
   }) : super(key: key);
   final preferences = SharedPreferences.getInstance();
 
@@ -444,6 +455,16 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                                     ),
                                   ),
                                   _anoTextFormField(),
+                                  Text(
+                                    "Combustível",
+                                    style: TextStyle(
+                                      fontFamily: 'Manrope',
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 15,
+                                      color: Color.fromARGB(255, 0, 0, 0),
+                                    ),
+                                  ),
+                                  _combustivelTextFormField(),
                                 ],
                               ),
                             ),
@@ -531,17 +552,15 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                                   style: ElevatedButton.styleFrom(
                                     primary: Color.fromARGB(255, 255, 255, 255),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () => Navigator.of(context).pop(),
                                   child: Padding(
-                                    padding:
-                                        EdgeInsets.fromLTRB(24, 11, 24, 11),
+                                    padding: EdgeInsets.fromLTRB(24, 11, 24, 11),
                                     child: Text(
                                       'Sair',
                                       style: TextStyle(
-                                          fontFamily: 'Manrope',
-                                          fontSize: 14,
-                                          color:
-                                              Color.fromARGB(255, 255, 81, 0)),
+                                        fontFamily: 'Manrope',
+                                        fontSize: 14,
+                                        color: Color.fromARGB(255, 255, 81, 0)),
                                     ),
                                   ),
                                 ),
@@ -570,11 +589,16 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                                       corTextController.text,
                                       _licensePlate,
                                       kilometragemTextController.text,
+                                      int.parse(combustivelTextController.text)
                                     );
                                 if (result) {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => VehicleData()),
+                                    MaterialPageRoute(builder: (context) => VehicleData(
+                                      nomeCliente: nomeCliente,
+                                      email: email,
+                                      celular: celular,
+                                    )),
                                   );
                                 }
                               },
@@ -623,12 +647,17 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
     );
   }
 
+  Widget _combustivelTextFormField() {
+    return TextFormField(
+      controller: combustivelTextController,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+
   Widget _corTextFormField() {
     return TextFormField(
+      controller: corTextController,
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      style: const TextStyle(
-        fontSize: 12,
-      ),
     );
   }
 

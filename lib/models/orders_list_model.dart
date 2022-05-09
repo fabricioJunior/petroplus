@@ -10,7 +10,7 @@ class OrdersListModel extends Equatable {
       : orders = json['items'].map<OrderModel>((e) => OrderModel.fromJson(e)).toList();
 
   OrderModel? getByLiscencePlate(String licensePlate) {
-    var busca = orders.where((order) => order.licensePlate == licensePlate);
+    var busca = orders.where((order) => order.licensePlate?.toLowerCase() == licensePlate.toLowerCase());
     if (busca.isNotEmpty) {
       return busca.first;
     }

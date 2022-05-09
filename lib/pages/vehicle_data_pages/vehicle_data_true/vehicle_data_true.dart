@@ -1,15 +1,28 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:petroplus/pages/end_reception_page/end_reception_page.dart';
+
 import '../../../widgets/appbar_uni_widget.dart';
 import '../../add_passenger/add_passenger_page.dart';
 import '../../drawer_menu.dart/navigation_drawer_menu.dart';
-import 'package:http/http.dart' as http;
 
 class AnaliseVeiculoRotaMap {}
 
 class VehicleData extends StatefulWidget {
-  VehicleData({Key? key}) : super(key: key);
+  final String? nomeCliente;
+  final String? email;
+  final String? celular;
+
+  const VehicleData({
+    Key? key,
+    this.nomeCliente,
+    this.email,
+    this.celular,
+  }) : super(key: key);
 
   @override
   State<VehicleData> createState() => _VehicleDataState();
@@ -34,10 +47,7 @@ class _VehicleDataState extends State<VehicleData> {
   }
 
   String _placaVehicleDataTrue = "";
-  String? _contatoVehicleDataTrue;
-  String? _emailVehicleDataTrue;
   String? _modeloVehicleDataTrue;
-  String? _nomeVehicleDataTrue;
   String? _statusVehicleDataTrue;
 
   Future<dynamic> loadProducts() async {
@@ -58,28 +68,10 @@ class _VehicleDataState extends State<VehicleData> {
     Map<String, dynamic> data = jsonDecode(response.body);
     Map controleLoop = data["items"][mapitemRetorno];
 
-    if (controleLoop["address_number"] == null) {
-      _contatoVehicleDataTrue = controleLoop["address_number"];
-    } else {
-      _contatoVehicleDataTrue = controleLoop["address_number"].toString();
-    }
-
-    if (controleLoop["email"] == null) {
-      _emailVehicleDataTrue = controleLoop["email"];
-    } else {
-      _emailVehicleDataTrue = controleLoop["email"].toString();
-    }
-
     if (controleLoop["vehicle_model_id"] == null) {
       _modeloVehicleDataTrue = controleLoop["vehicle_model_id"];
     } else {
       _modeloVehicleDataTrue = controleLoop["vehicle_model_id"].toString();
-    }
-
-    if (controleLoop["customer_name"] == null) {
-      _nomeVehicleDataTrue = controleLoop["customer_name"];
-    } else {
-      _nomeVehicleDataTrue = controleLoop["customer_name"].toString();
     }
 
     if (controleLoop["status"] == null) {
@@ -94,7 +86,6 @@ class _VehicleDataState extends State<VehicleData> {
       _placaVehicleDataTrue = controleLoop["license_plate"].toString();
     }
 
-    print("$controleLoop");
   }
 
   @override
@@ -122,14 +113,10 @@ class _VehicleDataState extends State<VehicleData> {
                           // ------------------------------------------------Checklists de Recepção
 
                           BarraHistoricoVeiculo(
-                            contatoClienteTrue: _contatoVehicleDataTrue ??
-                                "Contato não cadastrado",
-                            emailClienteTrue:
-                                _emailVehicleDataTrue ?? "Email não cadastrado",
-                            modeloClienteTrue: _modeloVehicleDataTrue ??
-                                "Modelo não cadastrado",
-                            nomeClienteTrue:
-                                _nomeVehicleDataTrue ?? "Nome não cadastrado",
+                            contatoClienteTrue: widget.celular ?? "Contato não cadastrado",
+                            emailClienteTrue: widget.email ?? "Email não cadastrado",
+                            modeloClienteTrue: _modeloVehicleDataTrue ?? "Modelo não cadastrado",
+                            nomeClienteTrue: widget.nomeCliente ?? "Nome não cadastrado",
                             placaClienteTrue: _placaVehicleDataTrue,
                             statusClienteTrue: _statusVehicleDataTrue ??
                                 " Status não cadastrado",
@@ -189,10 +176,21 @@ class _VehicleDataState extends State<VehicleData> {
                                           padding: const EdgeInsets.all(1.0),
                                           child: ElevatedButton(
                                             style: ElevatedButton.styleFrom(
-                                              primary: Color.fromARGB(
-                                                  255, 255, 255, 255),
+                                              primary: Color.fromARGB(255, 255, 255, 255),
                                             ),
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return EndReceptionPage(
+                                                      nomeCliente: widget.nomeCliente,
+                                                      email: widget.email,
+                                                      celular: widget.celular
+                                                    );
+                                                  }
+                                                ),
+                                              );
+                                            },
                                             child: Padding(
                                               padding: EdgeInsets.fromLTRB(
                                                   24, 11, 24, 11),
@@ -318,20 +316,9 @@ class BarraHistoricoVeiculo extends StatelessWidget {
                   Text(
                     "$nomeClienteTrue",
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: 18,
                       fontFamily: 'Manrope',
                       fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Container(
-                    height: 3,
-                  ),
-                  Text(
-                    "$modeloClienteTrue",
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontFamily: 'Manrope',
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   Container(

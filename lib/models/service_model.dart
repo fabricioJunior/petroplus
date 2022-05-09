@@ -4,28 +4,28 @@ import 'package:petroplus/models/meta_model.dart';
 
 import 'item_model.dart';
 
-Service serviceFromJson(String str) => Service.fromJson(json.decode(str));
+ServiceModel serviceFromJson(String str) => ServiceModel.fromJson(json.decode(str));
 
-String serviceToJson(Service data) => json.encode(data.toJson());
+String serviceToJson(ServiceModel data) => json.encode(data.toJson());
 
-class Service {
-  Service({
+class ServiceModel {
+  ServiceModel({
     this.meta,
-    this.items,
+    this.itemsModel,
   });
 
   MetaModel? meta;
-  List<ItemModel>? items;
+  List<ItemModel>? itemsModel;
 
-  factory Service.fromJson(Map<String, dynamic> json) => Service(
+  factory ServiceModel.fromJson(Map<String, dynamic> json) => ServiceModel(
         meta: MetaModel.fromJson(json["meta"]),
-        items: List<ItemModel>.from(json["items"].map((x) => ItemModel.fromJson(x))),
+        itemsModel: List<ItemModel>.from(json["items"].map((x) => ItemModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "meta": meta?.toJson(),
-        "items": items == null
+        "items": itemsModel == null
             ? null
-            : List<dynamic>.from(items!.map((x) => x.toJson())),
+            : List<dynamic>.from(itemsModel!.map((x) => x.toJson())),
       };
 }
