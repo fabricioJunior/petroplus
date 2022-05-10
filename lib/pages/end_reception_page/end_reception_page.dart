@@ -333,7 +333,7 @@ class BarraHistoricoVeiculo extends StatelessWidget {
                       child: placaClienteTrue == null
                           ? CircularProgressIndicator()
                           : Text(
-                              "$placaClienteTrue",
+                              placaClienteTrue?.toUpperCase() ?? 'SEM PLACA',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: 'Manrope',
@@ -494,7 +494,7 @@ class MyStatefulWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Column(
-            children: [
+            children: const [
               Text(
                 "Finalizar Recepção",
                 style: TextStyle(

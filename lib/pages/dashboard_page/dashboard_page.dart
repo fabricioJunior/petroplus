@@ -44,7 +44,7 @@ class DashboardPage extends StatelessWidget {
                           IncomingAppointmentsMobile(),
                         ],
 // ------------------------------------------------Body/Tablet
-                        if (isTablet) ...[
+                        if (isTablet || isMobile) ...[
                           // ------------------------------------------------VisãoGeral/EstaSemana
                           OverviewThisWeekTablet(),
                           // -----------------------------------------Row Overal Time Used / 36h
@@ -55,7 +55,7 @@ class DashboardPage extends StatelessWidget {
                           IncomingAppointmentsTablet(),
                         ],
 // ------------------------------------------------Body/Computadores
-                        if (isComput) ...[
+                        if (isComput || isMobile) ...[
                           // ------------------------------------------------VisãoGeral/EstaSemana
                           OverviewThisWeekTablet(),
                           // -----------------------------------------Row Overal Time Used / 36h

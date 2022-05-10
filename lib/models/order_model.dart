@@ -39,18 +39,18 @@ class OrderModel extends StorageEntity {
   String? mileage;
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
-        customerId: json["customerId"],
-        customerVehicleId: json["customerVehicleId"],
-        customerName: json["customerName"],
-        customerDocument: json["customerDocument"],
-        phoneNumber: json["phoneNumber"],
+        customerId: json["customer_id"],
+        customerVehicleId: json["customer_vehicle_id"],
+        customerName: json["customer_name"],
+        customerDocument: json["customer_document"],
+        phoneNumber: json["phone_number"],
         email: json["email"],
-        vehicleMakerId: json["vehicleMakerId"],
-        vehicleModelId: json["vehicleModelId"],
-        vehicleYear: json["vehicleYear"],
-        vehicleColor: json["vehicleColor"],
-        clientId: json["clientId"],
-        licensePlate: json["licensePlate"],
+        vehicleMakerId: json["vehicle_maker_id"],
+        vehicleModelId: json["vehicle_model_id"],
+        vehicleYear: json["vehicle_year"],
+        vehicleColor: json["vehicle_color"],
+        clientId: json["client_id"],
+        licensePlate: json["license_plate"],
         mileage: json["mileage"],
       );
 

@@ -69,7 +69,9 @@ class AddPassenger extends StatelessWidget {
         if (_state.containsOrder) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => VehicleData()),
+            MaterialPageRoute(builder: (context) => VehicleData(
+              placaCliente: analisePlacaInterno.text,
+            )),
           );
         } else {
           Navigator.push(
@@ -154,7 +156,7 @@ class AddPassenger extends StatelessWidget {
                                     fontSize: 35,
                                     color: Color.fromARGB(255, 33, 32, 34)),
                                 decoration: InputDecoration(
-                                  labelText: 'DIGITE A PLACA',
+                                  hintText: 'DIGITE A PLACA',
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color.fromARGB(0, 255, 81, 0),
@@ -189,6 +191,7 @@ class AddPassenger extends StatelessWidget {
                                           nomeCliente: order.customerName,
                                           celular: order.phoneNumber,
                                           email: order.email,
+                                          placaCliente: analisePlacaInterno.text,
                                         )),
                                   );
                                 } else {
@@ -232,7 +235,9 @@ class AddPassenger extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => VehicleData()),
+                                        builder: (context) => VehicleData(
+                                          placaCliente: analisePlacaInterno.text,
+                                        )),
                                   );
                                 } else {
                                   Navigator.push(

@@ -36,7 +36,7 @@ class _HomeSplashState extends State<HomeSplash> {
         height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('img/fundo1.png'),
+            image: AssetImage('assets/img/fundo1.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -53,7 +53,7 @@ class _HomeSplashState extends State<HomeSplash> {
                 // Logo
                 SizedBox(
                   width: 270,
-                  child: Image.asset('img/logo.png'),
+                  child: Image.asset('assets/img/logo.png'),
                 ),
 
                 Container(

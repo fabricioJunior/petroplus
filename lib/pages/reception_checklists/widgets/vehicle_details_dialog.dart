@@ -1,18 +1,62 @@
 import 'package:flutter/material.dart';
 
 class VehicleDetailsDialog extends StatelessWidget {
+  final bool isTablet;
   final bool isAuditPage;
-  const VehicleDetailsDialog({ Key? key, this.isAuditPage = false }) : super(key: key);
+  final String? nome;
+  final String? celular;
+  final String? email;
+  final String? modelo;
+  final String? ano;
+  final String? cor;
+  final String? km;
+  final String? mecanico;
+  final String? placa;
+
+  VehicleDetailsDialog({
+    Key? key,
+    required this.isTablet,
+    this.isAuditPage = false,
+    required this.nome,
+    required this.celular,
+    required this.email,
+    required this.modelo,
+    required this.ano,
+    required this.cor,
+    required this.km,
+    required this.mecanico,
+    required this.placa,
+  }) : super(key: key) {
+    _nomeEditingController = TextEditingController(text: nome ?? '');
+    _celularEditingController = TextEditingController(text: celular ?? '');
+    _emailEditingController = TextEditingController(text: email ?? '');
+    _modeloEditingController = TextEditingController(text: modelo ?? '');
+    _anoEditingController = TextEditingController(text: ano ?? '');
+    _corEditingController = TextEditingController(text: cor ?? '');
+    _kmEditingController = TextEditingController(text: km ?? '');
+    _mecanicoEditingController = TextEditingController(text: mecanico?? '');
+  }
+
+  late TextEditingController _nomeEditingController;
+  late TextEditingController _celularEditingController;
+  late TextEditingController _emailEditingController;
+  late TextEditingController _modeloEditingController;
+  late TextEditingController _anoEditingController;
+  late TextEditingController _corEditingController;
+  late TextEditingController _kmEditingController;
+  late TextEditingController _mecanicoEditingController;
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width * .6,
+            width: isTablet ? MediaQuery.of(context).size.width / 4 : MediaQuery.of(context).size.width * .5,
+            height: MediaQuery.of(context).size.height,
             child: Card(
               child: Stack(
                 children: [
@@ -34,7 +78,7 @@ class VehicleDetailsDialog extends StatelessWidget {
                                 width: 80,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(border: Border.all(width: .5, color: Colors.black87)), 
-                                child: Text('KLH6J34'),
+                                child: Text(placa ?? 'No Plate'),
                               ),
                             ],
                           ),
@@ -60,15 +104,27 @@ class VehicleDetailsDialog extends StatelessWidget {
 
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                          child: _buildFormField(label: 'Nome Completo', hintText: 'digite o nome'),
+                          child: _buildFormField(
+                            label: 'Nome Completo', 
+                            hintText: 'digite o nome',
+                            textController: _nomeEditingController,
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                          child: _buildFormField(label: 'Celular', hintText: '(15) 9966-5259'),
+                          child: _buildFormField(
+                            label: 'Celular', 
+                            hintText: '(15) 9966-5259',
+                            textController: _celularEditingController,
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                          child: _buildFormField(label: 'e-Mail', hintText: 'teste@teste.com.br'),
+                          child: _buildFormField(
+                            label: 'e-Mail', 
+                            hintText: 'teste@teste.com.br',
+                            textController: _emailEditingController,
+                          ),
                         ),
 
                         Divider(),
@@ -77,24 +133,44 @@ class VehicleDetailsDialog extends StatelessWidget {
 
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                          child: _buildFormField(label: 'Modelo', hintText: 'Modelo S'),
+                          child: _buildFormField(
+                            label: 'Modelo', 
+                            hintText: 'Modelo S',
+                            textController: _modeloEditingController,
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                          child: _buildFormField(label: 'Versão / Ano', hintText: 'Long Range / 2021'),
+                          child: _buildFormField(
+                            label: 'Versão / Ano', 
+                            hintText: 'Long Range / 2021',
+                            textController: _anoEditingController,
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                          child: _buildFormField(label: 'Cor', hintText: 'Azul Metálico'),
+                          child: _buildFormField(
+                            label: 'Cor', 
+                            hintText: 'Azul Metálico',
+                            textController: _corEditingController,
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                          child: _buildFormField(label: 'Kilometragem', hintText: '10.000 KM'),
+                          child: _buildFormField(
+                            label: 'Kilometragem', 
+                            hintText: '10.000 KM',
+                            textController: _kmEditingController,
+                          ),
                         ),
                         if (isAuditPage)  
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                            child: _buildFormField(label: 'Mecânico Responsável', hintText: 'Carlos Bergano', enabled: false),
+                            child: _buildFormField(
+                              label: 'Mecânico Responsável', 
+                              hintText: 'Carlos Bergano', 
+                              textController: _mecanicoEditingController,
+                            ),
                           ),
 
                         SizedBox(height: 20),
@@ -108,7 +184,7 @@ class VehicleDetailsDialog extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.only(top: 5.0, left: 8),
+                    padding: const EdgeInsets.all(10),
                     child: IconButton(
                       onPressed: () => Navigator.of(context).pop(), 
                       icon: Icon(Icons.clear)
@@ -155,14 +231,10 @@ class VehicleDetailsDialog extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(sectionLabel),
-          Expanded(
-            child: IconButton(
-              onPressed: () {}, 
-              icon: Icon(Icons.arrow_drop_down)
-            ),
-          ),
+          Icon(Icons.arrow_drop_down)
         ],
       ),
     );
@@ -172,6 +244,7 @@ class VehicleDetailsDialog extends StatelessWidget {
     required String label, 
     required String hintText,
     bool enabled = true,
+    required TextEditingController textController,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +254,8 @@ class VehicleDetailsDialog extends StatelessWidget {
         SizedBox(
           height: 40,
           child: TextField(
-            enabled: enabled,
+            controller: textController,
+            enabled: false,
             decoration: InputDecoration(
               filled: true,
               fillColor: Color(0xffFBFAFC),

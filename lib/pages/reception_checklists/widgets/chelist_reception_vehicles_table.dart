@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../controllers/x_order/x_order_controler.dart';
+import '../../../controllers/vehicle_controler.dart';
+import '../../../models/vehicle_model.dart';
 import '../../../service_locator.dart';
+import '../../../widgets/circular_progress.dart';
 import '../../../widgets/vehicle_history_table_widget.dart';
-import '../../dashboard_page/controles/x_order_state.dart';
-import 'vehicle_details_dialog.dart';
 
 //String inspecionar = "inspecionar";
 //String inspecionar = "Aguardando";
@@ -78,46 +78,42 @@ class ChelistReceptionVehiclesTableTablet extends StatelessWidget {
             height: 290,
             color: Color.fromARGB(255, 255, 255, 255),
             // --------------------Inicio Loop Back
-            child: ValueListenableBuilder<StateTodo>(
-              valueListenable: locator.get<XOrderController>(),
-              builder: (context, value, _) {
-                final state = value;
-                if (state is StateTodoLoading) {
-                  return Center(
-                      child: CircularProgressIndicator());
+            child: FutureBuilder<List<VehicleModel>>(
+              future: locator.get<VehicleController>().getVehicles(),
+              builder: (context, snapshot) {
+                
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return buildCircularProgress();
                 }
-                if (state is StateTodoSuccess) {
+
+                if (snapshot.hasData) {
+
+                  final vehicles = snapshot.data;
+
                   return ListView.builder(
-                      itemCount: state.todoSuccess.length,
-                      itemBuilder: (context, indice) {
-                        return Column(
-                          children: [
-                            Container(
-                              height: 5,
-                            ),
-                            ConteudoVeiculoDashboard(
-                              placaVeiculo: (state
-                                      .todoSuccess[indice]
-                                      .license_plate ??
-                                  ""),
-                              modeloVeiculo: (state
-                                  .todoSuccess[indice]
-                                  .customer_name),
-                              dataVeiculo: (state
-                                  .todoSuccess[indice].status),
-                            ),
-                            Container(
-                              height: 5,
-                            ),
-                          ],
-                        );
-                      });
+                    itemCount: vehicles?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          SizedBox(height: 5),
+                          ConteudoVeiculoDashboard(
+                            vehicleModel: vehicles![index],
+                            placaVeiculo: (vehicles[index].licensePlate ?? ""),
+                            modeloVeiculo: (vehicles[index].vehicleModelId.toString()),
+                            dataVeiculo: (vehicles[index].vehicleYear),
+                          ),
+                          Container(
+                            height: 5,
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  return Center(child: Text('Nenhum veículo encontrado'));
                 }
-                if (state is StateTodoError) {
-                  return Center(child: Text(state.todoError));
-                }
-                return Container();
-              },
+
+              }
             ),
           ),
         ],
@@ -134,16 +130,7 @@ class ChelistReceptionVehiclesTableMobile extends StatefulWidget {
   State<ChelistReceptionVehiclesTableMobile> createState() => _ChelistReceptionVehiclesTableMobileState();
 }
 
-class _ChelistReceptionVehiclesTableMobileState
-    extends State<ChelistReceptionVehiclesTableMobile> {
-  //Para iniciar antes de buildar a tela
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    locator.get<XOrderController>().getXOrders();
-  }
+class _ChelistReceptionVehiclesTableMobileState extends State<ChelistReceptionVehiclesTableMobile> {
 
   @override
   Widget build(BuildContext context) {
@@ -243,48 +230,42 @@ class _ChelistReceptionVehiclesTableMobileState
                   height: 290,
                   color: Color.fromARGB(255, 255, 255, 255),
                   // --------------------Inicio Loop Back
-                  child: ValueListenableBuilder<StateTodo>(
-                    valueListenable: locator.get<XOrderController>(),
-                    builder: (context, value, _) {
-                      final state = value;
-                      if (state is StateTodoLoading) {
-                        return Center(child: CircularProgressIndicator());
+                  child: FutureBuilder<List<VehicleModel>>(
+                    future: locator.get<VehicleController>().getVehicles(),
+                    builder: (context, snapshot) {
+                      
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return buildCircularProgress();
                       }
-                      if (state is StateTodoSuccess) {
+
+                      if (snapshot.hasData) {
+
+                        final vehicles = snapshot.data;
+
                         return ListView.builder(
-                            itemCount: state.todoSuccess.length,
-                            itemBuilder: (context, indice) {
-                              return Column(
-                                children: [
-                                  Container(
-                                    height: 5,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      showDialog(
-                                        context: context, 
-                                        useRootNavigator: true,
-                                        builder: (_) => VehicleDetailsDialog(isAuditPage: widget.isAuditPage),
-                                      );
-                                    },
-                                    child: ConteudoVeiculoDashboard(
-                                      placaVeiculo: (state.todoSuccess[indice].license_plate ?? ""),
-                                      modeloVeiculo: (state.todoSuccess[indice].customer_name),
-                                      dataVeiculo: (state.todoSuccess[indice].status),
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 5,
-                                  ),
-                                ],
-                              );
-                            });
+                          itemCount: vehicles?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                SizedBox(height: 5),
+                                ConteudoVeiculoDashboard(
+                                  vehicleModel: vehicles![index],
+                                  placaVeiculo: (vehicles[index].licensePlate ?? ""),
+                                  modeloVeiculo: (vehicles[index].vehicleModelId.toString()),
+                                  dataVeiculo: (vehicles[index].vehicleYear),
+                                ),
+                                Container(
+                                  height: 5,
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        return Center(child: Text('Nenhum veículo encontrado'));
                       }
-                      if (state is StateTodoError) {
-                        return Center(child: Text(state.todoError));
-                      }
-                      return Container();
-                    },
+
+                    }
                   ),
                 ),
                 WidgetConteudoVeiculoCheclistMobile(),
