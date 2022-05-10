@@ -79,7 +79,7 @@ class ChelistReceptionVehiclesTableTablet extends StatelessWidget {
             color: Color.fromARGB(255, 255, 255, 255),
             // --------------------Inicio Loop Back
             child: FutureBuilder<List<VehicleModel>>(
-              future: locator.get<VehicleController>().getVehicles(),
+              future: locator.get<VehicleController>().get(),
               builder: (context, snapshot) {
                 
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -231,7 +231,7 @@ class _ChelistReceptionVehiclesTableMobileState extends State<ChelistReceptionVe
                   color: Color.fromARGB(255, 255, 255, 255),
                   // --------------------Inicio Loop Back
                   child: FutureBuilder<List<VehicleModel>>(
-                    future: locator.get<VehicleController>().getVehicles(),
+                    future: locator.get<VehicleController>().get(),
                     builder: (context, snapshot) {
                       
                       if (snapshot.connectionState == ConnectionState.waiting) {

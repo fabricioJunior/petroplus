@@ -22,8 +22,7 @@ class ProductController {
 
   Future<ProductMediaModel?> getProductMedia(String id) async {
     try {
-      final result = await _repository.getProductMedia(id);
-      return result;
+      return await _repository.getProductMedia(id);
     } on HttpClientException catch (e) {
       showAlert(e.message!, isError: true);
     } catch (e) {

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../storages/storage_entity.dart';
+import '../adapters/cache/hive/storage_entity.dart';
 
 OrderModel orderModelFromJson(String str) =>
     OrderModel.fromJson(json.decode(str));

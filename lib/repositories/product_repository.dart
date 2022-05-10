@@ -12,7 +12,7 @@ class ProductRepository {
 
   ProductRepository(this._client);
 
-  Future<ProductModel> produtcs() async {
+  Future<ProductModel> get() async {
     try {
       Response response = await _client.get('products');
       return ProductModel.fromJson(response.data);
@@ -40,9 +40,7 @@ class ProductRepository {
 
   Future<ProductModel> getRecommended() async {
     try {
-      Response response = await _client.get(
-        'products?recommendations=true',
-      );
+      Response response = await _client.get('products?recommendations=true');
       final result = ProductModel.fromJson(response.data);
       return result;
     } on DioError catch (e) {

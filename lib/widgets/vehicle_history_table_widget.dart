@@ -146,7 +146,7 @@ class _IncomingAppointmentsTabletState extends State<IncomingAppointmentsTablet>
                             color: Color.fromARGB(255, 255, 255, 255),
                             // --------------------Inicio Loop Back
                             child: FutureBuilder<List<VehicleModel>>(
-                              future: locator.get<VehicleController>().getVehicles(),
+                              future: locator.get<VehicleController>().get(),
                               builder: (context, snapshot) {
                                 
                                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -360,7 +360,7 @@ class _IncomingAppointmentsMobileState extends State<IncomingAppointmentsMobile>
                           height: 290,
                           color: Color.fromARGB(255, 255, 255, 255),
                           child: FutureBuilder<List<VehicleModel>>(
-                            future: locator.get<VehicleController>().getVehicles(),
+                            future: locator.get<VehicleController>().get(),
                             builder: (context, snapshot) {
                               
                               if (snapshot.connectionState == ConnectionState.waiting) {

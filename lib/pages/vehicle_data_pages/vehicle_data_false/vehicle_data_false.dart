@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../controllers/add_order_controller.dart';
+import '../../../controllers/order_controller.dart';
 import '../../../service_locator.dart';
 import '../../../widgets/appbar_uni_widget.dart';
 import '../../add_passenger/add_passenger_page.dart';
@@ -220,15 +220,15 @@ class BarraHistoricoVeiculo extends StatelessWidget {
                     ),
                     child: Center(
                       child: placaClienteTrue == null
-                          ? CircularProgressIndicator()
-                          : Text(
-                              "$placaClienteTrue",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: 'Manrope',
-                                fontWeight: FontWeight.w800,
-                              ),
+                        ? CircularProgressIndicator()
+                        : Text(
+                            placaClienteTrue?.toUpperCase() ?? 'SEM PLACA',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Manrope',
+                              fontWeight: FontWeight.w800,
                             ),
+                          ),
                     ),
                   ),
                   Container(
@@ -581,19 +581,17 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                                 primary: Color.fromARGB(255, 255, 81, 0),
                               ),
                               onPressed: () async {
-                                var result = await locator
-                                    .get<AddOrderController>()
-                                    .onCreateNewOrder(
-                                      nomeCompletoController.text,
-                                      cpfController.text,
-                                      celularController.text,
-                                      emailController.text,
-                                      anoTextController.text,
-                                      corTextController.text,
-                                      _licensePlate,
-                                      kilometragemTextController.text,
-                                      int.parse(combustivelTextController.text)
-                                    );
+                                var result = await locator.get<OrderController>().post(
+                                  nomeCompletoController.text,
+                                  cpfController.text,
+                                  celularController.text,
+                                  emailController.text,
+                                  anoTextController.text,
+                                  corTextController.text,
+                                  _licensePlate,
+                                  kilometragemTextController.text,
+                                  int.parse(combustivelTextController.text)
+                                );
                                 if (result) {
                                   Navigator.push(
                                     context,
