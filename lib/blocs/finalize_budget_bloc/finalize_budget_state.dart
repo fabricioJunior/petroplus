@@ -7,7 +7,7 @@ class FinalizeBugetInitial extends FinalizeBugetState {}
 class FinalizeBugetLoadInProgresso extends FinalizeBugetState {}
 
 class FinalizeBugetLoadSucess extends FinalizeBugetState {
-  final Produtcs recommedations;
+  final ProductModel recommedations;
   final Services services;
 
   FinalizeBugetLoadSucess(
