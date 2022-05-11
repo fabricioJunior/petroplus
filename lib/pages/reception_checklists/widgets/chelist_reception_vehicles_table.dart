@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../controllers/vehicle_controler.dart';
-import '../../../models/vehicle_model.dart';
+import '../../../alerts/loading.dart';
+import '../../../controllers/order_controller.dart';
+import '../../../models/order_model.dart';
 import '../../../service_locator.dart';
-import '../../../widgets/circular_progress.dart';
 import '../../../widgets/vehicle_history_table_widget.dart';
 
 //String inspecionar = "inspecionar";
@@ -78,8 +78,8 @@ class ChelistReceptionVehiclesTableTablet extends StatelessWidget {
             height: 290,
             color: Color.fromARGB(255, 255, 255, 255),
             // --------------------Inicio Loop Back
-            child: FutureBuilder<List<VehicleModel>>(
-              future: locator.get<VehicleController>().get(),
+            child: FutureBuilder<List<OrderModel>>(
+              future: locator.get<OrderController>().get(),
               builder: (context, snapshot) {
                 
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -97,7 +97,7 @@ class ChelistReceptionVehiclesTableTablet extends StatelessWidget {
                         children: [
                           SizedBox(height: 5),
                           ConteudoVeiculoDashboard(
-                            vehicleModel: vehicles![index],
+                            orderModel: vehicles![index],
                             placaVeiculo: (vehicles[index].licensePlate ?? ""),
                             modeloVeiculo: (vehicles[index].vehicleModelId.toString()),
                             dataVeiculo: (vehicles[index].vehicleYear),
@@ -230,12 +230,12 @@ class _ChelistReceptionVehiclesTableMobileState extends State<ChelistReceptionVe
                   height: 290,
                   color: Color.fromARGB(255, 255, 255, 255),
                   // --------------------Inicio Loop Back
-                  child: FutureBuilder<List<VehicleModel>>(
-                    future: locator.get<VehicleController>().get(),
+                  child: FutureBuilder<List<OrderModel>>(
+                    future: locator.get<OrderController>().get(),
                     builder: (context, snapshot) {
                       
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return buildCircularProgress();
+                        return loadingDialog();
                       }
 
                       if (snapshot.hasData) {
@@ -249,7 +249,7 @@ class _ChelistReceptionVehiclesTableMobileState extends State<ChelistReceptionVe
                               children: [
                                 SizedBox(height: 5),
                                 ConteudoVeiculoDashboard(
-                                  vehicleModel: vehicles![index],
+                                  orderModel: vehicles![index],
                                   placaVeiculo: (vehicles[index].licensePlate ?? ""),
                                   modeloVeiculo: (vehicles[index].vehicleModelId.toString()),
                                   dataVeiculo: (vehicles[index].vehicleYear),

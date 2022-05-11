@@ -21,6 +21,17 @@ class OrderController {
     return null;
   }
 
+    Future<List<OrderModel>> get() async {
+    try {
+      return await _repository.get();
+    } on HttpClientException catch (e) {
+      showAlert(e.message!, isError: true);
+    } catch (e) {
+      showAlert(e.toString(), isError: true);
+    }
+    return [];
+  }
+
   Future<bool> post(
     String nome,
     String cpf,

@@ -1,7 +1,11 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:petroplus/controllers/order_controller.dart';
 import 'package:petroplus/controllers/vehicle_controler.dart';
-import 'package:petroplus/widgets/circular_progress.dart';
+import 'package:petroplus/models/vmodel_model.dart';
+import 'package:petroplus/utils/date_handler.dart';
+import '../alerts/loading.dart';
+import '../models/order_model.dart';
 import '../models/vehicle_model.dart';
 import '../pages/reception_checklists/widgets/vehicle_details_dialog.dart';
 import '../service_locator.dart';
@@ -145,8 +149,8 @@ class _IncomingAppointmentsTabletState extends State<IncomingAppointmentsTablet>
                             height: 290,
                             color: Color.fromARGB(255, 255, 255, 255),
                             // --------------------Inicio Loop Back
-                            child: FutureBuilder<List<VehicleModel>>(
-                              future: locator.get<VehicleController>().get(),
+                            child: FutureBuilder<List<OrderModel>>(
+                              future: locator.get<OrderController>().get(),
                               builder: (context, snapshot) {
                                 
                                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -155,24 +159,32 @@ class _IncomingAppointmentsTabletState extends State<IncomingAppointmentsTablet>
 
                                 if (snapshot.hasData) {
 
-                                  final vehicles = snapshot.data;
+                                  final orders = snapshot.data;
 
                                   return ListView.builder(
-                                    itemCount: vehicles?.length ?? 0,
+                                    itemCount: orders?.length ?? 0,
                                     itemBuilder: (context, index) {
-                                      return Column(
-                                        children: [
-                                          SizedBox(height: 5),
-                                          ConteudoVeiculoDashboard(
-                                            vehicleModel: vehicles![index],
-                                            placaVeiculo: (vehicles[index].licensePlate ?? ""),
-                                            modeloVeiculo: (vehicles[index].vehicleModelId.toString()),
-                                            dataVeiculo: (vehicles[index].vehicleYear),
-                                          ),
-                                          Container(
-                                            height: 5,
-                                          ),
-                                        ],
+                                      return FutureBuilder<VModelModel?>(
+                                        future: locator.get<VehicleController>().getModel(orders![index].vehicleModelId!),
+                                        builder: (context, snapshot) {
+                                          
+                                          var vmodel = snapshot.hasData ? snapshot.data?.name : 'carregando...';
+                                          
+                                          return Column(
+                                            children: [
+                                              SizedBox(height: 5),
+                                              ConteudoVeiculoDashboard(
+                                                orderModel: orders[index],
+                                                placaVeiculo: orders[index].licensePlate ?? "",
+                                                modeloVeiculo: vmodel,
+                                                dataVeiculo: getDateBr(orders[index].createdAt!),
+                                              ),
+                                              Container(
+                                                height: 5,
+                                              ),
+                                            ],
+                                          );
+                                        }
                                       );
                                     },
                                   );
@@ -359,8 +371,8 @@ class _IncomingAppointmentsMobileState extends State<IncomingAppointmentsMobile>
                           width: double.maxFinite,
                           height: 290,
                           color: Color.fromARGB(255, 255, 255, 255),
-                          child: FutureBuilder<List<VehicleModel>>(
-                            future: locator.get<VehicleController>().get(),
+                          child: FutureBuilder<List<OrderModel>>(
+                            future: locator.get<OrderController>().get(),
                             builder: (context, snapshot) {
                               
                               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -378,7 +390,7 @@ class _IncomingAppointmentsMobileState extends State<IncomingAppointmentsMobile>
                                       children: [
                                         SizedBox(height: 5),
                                         ConteudoVeiculoDashboard(
-                                          vehicleModel: vehicles![index],
+                                          orderModel: vehicles![index],
                                           placaVeiculo: (vehicles[index].licensePlate ?? ""),
                                           modeloVeiculo: (vehicles[index].vehicleModelId.toString()),
                                           dataVeiculo: (vehicles[index].vehicleYear),
@@ -437,13 +449,13 @@ class _IncomingAppointmentsMobileState extends State<IncomingAppointmentsMobile>
 }
 
 class ConteudoVeiculoDashboard extends StatelessWidget {
-  final VehicleModel vehicleModel;
+  final OrderModel orderModel;
   ConteudoVeiculoDashboard({
     Key? key,
     required this.placaVeiculo,
     required this.modeloVeiculo,
     required this.dataVeiculo,
-    required this.vehicleModel,
+    required this.orderModel,
   }) : super(key: key);
 
   String? placaVeiculo;
@@ -459,14 +471,14 @@ class ConteudoVeiculoDashboard extends StatelessWidget {
           useRootNavigator: true,
           builder: (_) => VehicleDetailsDialog(
             isTablet: true,
-            nome: vehicleModel.customerName,
-            email: vehicleModel.email,
-            celular: vehicleModel.phoneNumber,
-            modelo: vehicleModel.vehicleModelId.toString(),
-            ano: vehicleModel.vehicleYear,
-            cor: vehicleModel.vehicleColor,
-            km: vehicleModel.mileage,
-            placa: vehicleModel.licensePlate,
+            nome: orderModel.customerName,
+            email: orderModel.email,
+            celular: orderModel.phoneNumber,
+            modelo: orderModel.vehicleModelId.toString(),
+            ano: orderModel.vehicleYear,
+            cor: orderModel.vehicleColor,
+            km: orderModel.mileage,
+            placa: orderModel.licensePlate,
             mecanico: 'Não definido',
           ),
         );
@@ -509,7 +521,7 @@ class ConteudoVeiculoDashboard extends StatelessWidget {
               ),
               Flexible(
                 flex: 10,
-                child: Container(
+                child: SizedBox(
                   child: Center(
                     child: Text(
                       '$modeloVeiculo',

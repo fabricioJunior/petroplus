@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../dashboard_page/widgets/visao_geral_esta_semana_widgets.dart';
+import '../../dashboard_page/widgets/date_selector.dart';
+import '../../dashboard_page/widgets/overview_this_web.dart';
 
 final List<String> semanas = [
   'Primeira Semana',
@@ -31,20 +32,10 @@ class DivschelistReceptionVehiclesTableTablet extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              border:
-                  Border.all(width: 2, color: Color.fromRGBO(235, 234, 237, 1)),
+              border: Border.all(width: 2, color: Color.fromRGBO(235, 234, 237, 1)),
               color: Color.fromARGB(255, 255, 255, 255),
             ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.today,
-                  color: Color.fromARGB(172, 46, 44, 52),
-                  size: 20.09,
-                ),
-                BotaoDataAcao(),
-              ],
-            ),
+            child: DateSelector(),
           ),
         ],
       ),

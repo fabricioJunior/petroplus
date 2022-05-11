@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:petroplus/alerts/loading.dart';
 import 'package:petroplus/controllers/product_controller.dart';
 import 'package:petroplus/models/product_media_model.dart';
 import 'package:petroplus/models/service_model.dart';
@@ -12,7 +13,6 @@ import 'package:http/http.dart' as http;
 import '../../controllers/service_controller.dart';
 import '../../models/product_model.dart';
 import '../../service_locator.dart';
-import '../../widgets/circular_progress.dart';
 import '../drawer_menu.dart/navigation_drawer_menu.dart';
 import 'widgets/product_dialog.dart';
 import 'widgets/service_dialog.dart';
@@ -316,7 +316,7 @@ class _MyWidgetState extends State<MyWidget> {
                                         productMediasModel: snapshotMedia.data,
                                       );
                                     } else {
-                                      return buildCircularProgress();
+                                      return loadingDialog();
                                     }
                                   }
                                 );

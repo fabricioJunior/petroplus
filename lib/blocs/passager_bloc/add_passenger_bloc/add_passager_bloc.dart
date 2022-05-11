@@ -25,7 +25,7 @@ class AddPassangerBloc extends Bloc<AddPassagerEvent, AddPassagerState> {
   ) async {
     emit(AddPassagerLoadInProgress());
     try {
-      await _repository.getAll();
+      await _repository.get();
       emit(AddPassagerLoadSucess());
     } catch (e) {
       emit(AddPassagerLoadError());

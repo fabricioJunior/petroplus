@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../dashboard_page/widgets/visao_geral_esta_semana_widgets.dart';
+import '../../dashboard_page/widgets/date_selector.dart';
+import '../../dashboard_page/widgets/overview_this_web.dart';
 
 final List<String> semanas = [
   'Primeira Semana',
@@ -37,16 +38,7 @@ class DeliveryAuditPageTablet extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.today,
-                    color: Color.fromARGB(172, 46, 44, 52),
-                    size: 20.09,
-                  ),
-                  BotaoDataAcao(),
-                ],
-              ),
+              child: DateSelector(),
             ),
           ),
         ],
@@ -81,18 +73,7 @@ class DeliveryAuditPageMobile extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.today,
-                    color: Color.fromARGB(172, 46, 44, 52),
-                    size: 20.09,
-                  ),
-                  BotaoDataAcao(),
-                ],
-              ),
+              child: DateSelector(),
             ),
           ),
         ],

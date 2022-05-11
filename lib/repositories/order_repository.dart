@@ -1,23 +1,20 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import '../errors/excepions.dart';
-import '../models/orders_list_model.dart';
 
 import '../consts/apis.dart';
 import '../errors/http_client_error_handler.dart';
 import '../models/order_model.dart';
-import '../storage/order_store.dart';
 
 class OrderRepository {
   final Dio _client;
-  final OrderStore _orderStore;
 
-  OrderRepository(this._client, this._orderStore);
+  OrderRepository(this._client);
 
-  Future<OrdersListModel> getAll() async {
+  Future<List<OrderModel>> get() async {
     try {
-      Response response = await _client.get(APIS.urlGetVehicles);
-      return OrdersListModel.fromJson(response.data);
+      final response = await _client.get(APIS.urlGetOrders);
+      return List.from(response.data['items']).map((e) => OrderModel.fromJson(e)).toList();
     } on DioError catch (e) {
       throw getHttpClientException(e);
     } on PlatformException {
@@ -29,15 +26,7 @@ class OrderRepository {
 
   Future<OrderModel?> getByLicensePlate(String licensePlate) async {
     try {
-      List<OrderModel> orders = await _orderStore.fetchAll();
-      OrderModel? result = OrdersListModel(orders).getByLiscencePlate(licensePlate);
-
-      if (result != null) {
-        return result;
-      }
-
-      var ordersList = await getAll();
-      return ordersList.getByLiscencePlate(licensePlate);
+      return OrderModel.getByLicensePlate(await get(), licensePlate);
     } on DioError catch (e) {
       throw getHttpClientException(e);
     } on PlatformException {

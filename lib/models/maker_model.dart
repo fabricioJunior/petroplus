@@ -1,7 +1,5 @@
-import 'package:equatable/equatable.dart';
-
-class MarkModel extends Equatable {
-  MarkModel({
+class MakerModel {
+  MakerModel({
     this.createdAt,
     this.updatedAt,
     this.id,
@@ -15,7 +13,7 @@ class MarkModel extends Equatable {
   String? name;
   int? tableId;
 
-  factory MarkModel.fromJson(Map<String, dynamic> json) => MarkModel(
+  factory MakerModel.fromJson(Map<String, dynamic> json) => MakerModel(
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         id: json["id"],
@@ -30,13 +28,4 @@ class MarkModel extends Equatable {
         "name": name,
         "table_id": tableId,
       };
-
-  @override
-  List<Object?> get props => [
-        createdAt,
-        updatedAt,
-        id,
-        name,
-        tableId,
-      ];
 }

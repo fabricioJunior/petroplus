@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:petroplus/models/vehicle_model.dart';
+import 'package:petroplus/models/order_model.dart';
 
 ProductMediaModel productMediaModelFromJson(String str) => ProductMediaModel.fromJson(json.decode(str));
 
@@ -24,7 +24,7 @@ class ProductMediaModel {
         this.clientId,
         this.deletedAt,
         this.medias,
-        this.vehicles,
+        this.orders,
     });
 
     DateTime? createdAt;
@@ -39,7 +39,7 @@ class ProductMediaModel {
     String? clientId;
     dynamic deletedAt;
     List<MediaModel>? medias;
-    List<VehicleModel>? vehicles;
+    List<OrderModel>? orders;
 
     factory ProductMediaModel.fromJson(Map<String, dynamic> json) => ProductMediaModel(
         createdAt: DateTime.parse(json["created_at"]),
@@ -54,7 +54,7 @@ class ProductMediaModel {
         clientId: json["client_id"],
         deletedAt: json["deleted_at"],
         medias: List<MediaModel>.from(json["medias"].map((x) => MediaModel.fromJson(x))),
-        vehicles: List<VehicleModel>.from(json["vehicles"].map((x) => VehicleModel.fromJson(x))),
+        orders: List<OrderModel>.from(json["vehicles"].map((x) => OrderModel.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -70,7 +70,7 @@ class ProductMediaModel {
         "client_id": clientId,
         "deleted_at": deletedAt,
         "medias": medias != null ? List<dynamic>.from(medias!.map((x) => x.toJson())) : null,
-        "vehicles": vehicles != null ? List<dynamic>.from(vehicles!.map((x) => x)) : null,
+        "vehicles": orders != null ? List<dynamic>.from(orders!.map((x) => x)) : null,
     };
 }
 

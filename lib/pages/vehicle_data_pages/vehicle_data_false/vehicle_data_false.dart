@@ -2,15 +2,12 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-import 'package:petroplus/blocs/order_bloc/add_order_bloc.dart';
-import 'package:petroplus/models/mark_model.dart';
-import 'package:petroplus/repositories/vehicle_repository.dart';
+import 'package:petroplus/models/maker_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../controllers/order_controller.dart';
-import '../../../models/model_model.dart';
+import '../../../models/vmodel_model.dart';
 import '../../../service_locator.dart';
 import '../../../widgets/appbar_uni_widget.dart';
 import '../../add_passenger/add_passenger_page.dart';
@@ -54,11 +51,11 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
   }
 
   String _placaVehicleDataTrue = "Placa";
-  String? _contatoVehicleDataTrue = "Contato";
-  String? _emailVehicleDataTrue = "Email";
-  String? _modeloVehicleDataTrue = "Modelo";
-  String? _nomeVehicleDataTrue = "Nome";
-  String? _statusVehicleDataTrue = "Status";
+  String _contatoVehicleDataTrue = "Contato";
+  String _emailVehicleDataTrue = "Email";
+  String _modeloVehicleDataTrue = "Modelo";
+  String _nomeVehicleDataTrue = "Nome";
+  String _statusVehicleDataTrue = "Status";
 
   Future<dynamic> loadProducts() async {
     final preferences = await SharedPreferences.getInstance();
@@ -391,8 +388,8 @@ final TextEditingController kilometragemTextController =
     TextEditingController();
 
 Gasolina? gasolinaSelecionada;
-MarkModel? markModelSelecionada;
-Model? modelSelect;
+MakerModel? markModelSelecionada;
+VModelModel? modelSelect;
 
 class FormularioDeEntradaPostVeiculo extends StatelessWidget {
   final Function(String) onNameChanged;
@@ -420,26 +417,7 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
-      child: BlocProvider<AddOrderBloc>(
-        create: (context) => AddOrderBloc(locator.get<VehicleRepository>())
-          ..add(AddOrderStarted()),
-        child: BlocBuilder<AddOrderBloc, AddOrderState>(
-          builder: (context, state) {
-            switch (state.runtimeType) {
-              case AddOrderLoadInProgress:
-              case AddOrderInitial:
-                return _loadState();
-              case AddOrderLoadSucess:
-              case AddOrderLoadModelsInProgress:
-              case AddOrderLoadModelsFail:
-              case AddOrderLoadModelsInSucess:
-                return _sucessState(context, state);
-              default:
-                return _errorState();
-            }
-          },
-        ),
-      ),
+      child: _sucessState(context),
     );
   }
 
@@ -447,7 +425,7 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
     return CircularProgressIndicator();
   }
 
-  Widget _sucessState(BuildContext context, AddOrderState state) {
+  Widget _sucessState(BuildContext context) {
     return Column(
       children: [
         Form(
@@ -490,7 +468,7 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                                     color: Color.fromARGB(255, 0, 0, 0),
                                   ),
                                 ),
-                                _marcaTextFormField(state.marks),
+                                _marcaTextFormField([]),
                                 Text(
                                   "Ano",
                                   style: TextStyle(
@@ -544,7 +522,7 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                                     color: Color.fromARGB(255, 0, 0, 0),
                                   ),
                                 ),
-                                _modeloTextFormField(state.models),
+                                _modeloTextFormField([]),
                                 Text(
                                   "Cor",
                                   style: TextStyle(
@@ -680,11 +658,11 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
     return Text('Error ao carregar informações');
   }
 
-  Widget _marcaTextFormField(List<MarkModel> models) {
+  Widget _marcaTextFormField(List<MakerModel> models) {
     return MarksDropdown(models);
   }
 
-  Widget _modeloTextFormField(List<Model> models) {
+  Widget _modeloTextFormField(List<VModelModel> models) {
     return _ModelsDropdown(models);
   }
 
@@ -715,7 +693,7 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
 }
 
 class MarksDropdown extends StatefulWidget {
-  final List<MarkModel> models;
+  final List<MakerModel> models;
 
   MarksDropdown(this.models, {Key? key}) : super(key: key);
 
@@ -728,26 +706,21 @@ class _MarksDropdownState extends State<MarksDropdown> {
   Widget build(BuildContext context) {
     return Container(
       color: Color(0x0FE8DEF2),
-      child: DropdownButton<MarkModel>(
+      child: DropdownButton<MakerModel>(
         value: widget.models[0],
         elevation: 16,
         underline: Container(
           height: 2,
           color: Colors.black,
         ),
-        onChanged: (MarkModel? newValue) {
+        onChanged: (MakerModel? newValue) {
           setState(() {
-            markModelSelecionada = newValue!;
-            if (markModelSelecionada != null) {
-              context
-                  .read<AddOrderBloc>()
-                  .add(AddOrderSelectedMark(markModelSelecionada!));
-            }
+     
           });
         },
         items: widget.models
-            .map<DropdownMenuItem<MarkModel>>((MarkModel value) {
-              return DropdownMenuItem<MarkModel>(
+            .map<DropdownMenuItem<MakerModel>>((MakerModel value) {
+              return DropdownMenuItem<MakerModel>(
                 value: value,
                 child: Text(value.name ?? ''),
               );
@@ -760,7 +733,7 @@ class _MarksDropdownState extends State<MarksDropdown> {
 }
 
 class _ModelsDropdown extends StatefulWidget {
-  final List<Model> models;
+  final List<VModelModel> models;
 
   const _ModelsDropdown(this.models, {Key? key}) : super(key: key);
 
@@ -771,34 +744,26 @@ class _ModelsDropdown extends StatefulWidget {
 class _ModelsDropdownState extends State<_ModelsDropdown> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddOrderBloc, AddOrderState>(
-      builder: (context, state) {
-        if (state is AddOrderLoadModelsInProgress) {
-          return CircularProgressIndicator();
-        }
-        return Container(
-          color: Color.fromARGB(15, 232, 222, 242),
-          child: DropdownButton<Model>(
-            value: widget.models.isNotEmpty ? widget.models.first : null,
-            elevation: 16,
-            underline: Container(
-              height: 2,
-              color: Colors.black,
-            ),
-            onChanged: (Model? newValue) {
-              setState(() {
-                modelSelect = newValue!;
-              });
-            },
-            items: widget.models.map<DropdownMenuItem<Model>>((Model value) {
-              return DropdownMenuItem<Model>(
-                value: value,
-                child: Text(value.name ?? ''),
-              );
-            }).toList(),
-          ),
-        );
-      },
+    return Container(
+      color: Color.fromARGB(15, 232, 222, 242),
+      child: DropdownButton<VModelModel>(
+        value: widget.models.isNotEmpty ? widget.models.first : null,
+        elevation: 16,
+        underline: Container(
+          height: 2,
+          color: Colors.black,
+        ),
+        onChanged: (VModelModel? newValue) {
+          setState(() {
+          });
+        },
+        items: widget.models.map<DropdownMenuItem<VModelModel>>((VModelModel value) {
+          return DropdownMenuItem<VModelModel>(
+            value: value,
+            child: Text(value.name ?? ''),
+          );
+        }).toList(),
+      ),
     );
   }
 }

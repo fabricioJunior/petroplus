@@ -1,7 +1,5 @@
-import 'package:equatable/equatable.dart';
-
-class Model extends Equatable {
-  Model({
+class VModelModel {
+  VModelModel({
     this.createdAt,
     this.updatedAt,
     this.id,
@@ -21,7 +19,7 @@ class Model extends Equatable {
   int? tableId;
   String? image;
 
-  factory Model.fromJson(Map<String, dynamic> json) => Model(
+  factory VModelModel.fromJson(Map<String, dynamic> json) => VModelModel(
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
         id: json["id"],
@@ -38,21 +36,8 @@ class Model extends Equatable {
         "id": id,
         "maker_id": makerId,
         "name": name,
-        "years":
-            years == null ? null : List<dynamic>.from(years!.map((x) => x)),
+        "years": years == null ? null : List<dynamic>.from(years!.map((x) => x)),
         "table_id": tableId,
         "image": image,
       };
-
-  @override
-  List<Object?> get props => [
-        createdAt,
-        updatedAt,
-        id,
-        makerId,
-        name,
-        years,
-        tableId,
-        image,
-      ];
 }

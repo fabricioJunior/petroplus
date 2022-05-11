@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:petroplus/alerts/loading.dart';
 import '../alerts/alerts.dart';
 import '../models/auth_user_model.dart';
 import '../repositories/login_repository.dart';
@@ -202,16 +203,18 @@ class _HomeSplashState extends State<HomeSplash> {
 
 
   void _login() async {
+
+    showDialog(
+      context: context, 
+      builder: (_) => loadingDialog(),
+    );
     
     final savedToken = await locator.get<LoginRepository>().login(AuthUserModel(
       email: _emailImputController.text,
       password: _senhaImputController.text),
     );
 
-    // final preferences = await SharedPreferences.getInstance();
-    // final token = preferences.getString("token");
-
-    // log(token ?? '', error: 'TOKEN INVÁLIDO');
+    Navigator.pop(context);
 
     if (savedToken) {
       Navigator.of(context).pushReplacement(
@@ -221,7 +224,9 @@ class _HomeSplashState extends State<HomeSplash> {
           },
         ),
       );
+
     } else {
+      showAlertDialog(context, "Login Inválido!");
       showAlert("Login Inválido!", isError: true);
     }
   }

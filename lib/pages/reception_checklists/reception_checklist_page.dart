@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../dashboard_page/widgets/dashboard_responsive_widgets.dart';
-import '../dashboard_page/widgets/visao_geral_esta_semana_widgets.dart';
+import '../dashboard_page/widgets/overview_this_web.dart';
 import '../dashboard_page/widgets/widgets_analysis_all_widget.dart';
 import 'widgets/chelist_reception_vehicles_table.dart';
 import 'widgets/divschelist_reception_vehicles_table.dart';

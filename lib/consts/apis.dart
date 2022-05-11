@@ -3,11 +3,10 @@ class APIS {
   static String urlBase = 'https://petroplus-api-test.herokuapp.com/v1/';
 
   /// [Vehicles]
-  static String urlGetVehicles =
-      'orders?status[]=AAPR&status[]=DLVD&status[]=INSP&status[]=IPGR&status[]=PAID&status[]=PEND&status[]=QUTD&status[]=RFCO&status[]=AWAT';
-  static String urlGetMakes = 'vehicles/makers?searchTerm=&limit=150&page=1';
+  static String urlGetModels = 'vehicles/models/';
+  static String urlGetMakers = 'vehicles/makers/';
 
   /// [Order]
   static String urlGetOrdersAwait = 'orders?status=AWAT&page=1&limit=10';
-  static String urlGetOrder = 'orders/?status=AWAT&page=1&limit=10';
+  static String urlGetOrders = 'orders?status[]=AAPR&status[]=DLVD&status[]=INSP&status[]=IPGR&status[]=PAID&status[]=PEND&status[]=QUTD&status[]=RFCO&status[]=AWAT';
 }
