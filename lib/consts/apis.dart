@@ -5,6 +5,7 @@ class APIS {
   /// [Vehicles]
   static String urlGetVehicles =
       'orders?status[]=AAPR&status[]=DLVD&status[]=INSP&status[]=IPGR&status[]=PAID&status[]=PEND&status[]=QUTD&status[]=RFCO&status[]=AWAT';
+  static String urlGetMakes = 'vehicles/makers?searchTerm=&limit=150&page=1';
 
   /// [Order]
   static String urlGetOrdersAwait = 'orders?status=AWAT&page=1&limit=10';

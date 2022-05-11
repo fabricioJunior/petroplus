@@ -1,10 +1,16 @@
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:petroplus/blocs/order_bloc/add_order_bloc.dart';
+import 'package:petroplus/models/mark_model.dart';
+import 'package:petroplus/repositories/vehicle_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../controllers/order_controller.dart';
+import '../../../models/model_model.dart';
 import '../../../service_locator.dart';
 import '../../../widgets/appbar_uni_widget.dart';
 import '../../add_passenger/add_passenger_page.dart';
@@ -130,7 +136,7 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
                     return Column(
                       children: [
 // ------------------------------------------------Body/Tablet
-                        if (isTablet) ...[
+                        if (!isTablet) ...[
                           // ------------------------------------------------Checklists de Recepção
 
                           BarraHistoricoVeiculo(
@@ -385,6 +391,8 @@ final TextEditingController kilometragemTextController =
     TextEditingController();
 
 Gasolina? gasolinaSelecionada;
+MarkModel? markModelSelecionada;
+Model? modelSelect;
 
 class FormularioDeEntradaPostVeiculo extends StatelessWidget {
   final Function(String) onNameChanged;
@@ -412,187 +420,212 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
-      child: Column(
-        children: [
-          Form(
-            child: Column(
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Flexible(
-                            flex: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Dados do Veículo",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 30,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
+      child: BlocProvider<AddOrderBloc>(
+        create: (context) => AddOrderBloc(locator.get<VehicleRepository>())
+          ..add(AddOrderStarted()),
+        child: BlocBuilder<AddOrderBloc, AddOrderState>(
+          builder: (context, state) {
+            switch (state.runtimeType) {
+              case AddOrderLoadInProgress:
+              case AddOrderInitial:
+                return _loadState();
+              case AddOrderLoadSucess:
+              case AddOrderLoadModelsInProgress:
+              case AddOrderLoadModelsFail:
+              case AddOrderLoadModelsInSucess:
+                return _sucessState(context, state);
+              default:
+                return _errorState();
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _loadState() {
+    return CircularProgressIndicator();
+  }
+
+  Widget _sucessState(BuildContext context, AddOrderState state) {
+    return Column(
+      children: [
+        Form(
+          child: Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Dados do Veículo",
+                                  style: TextStyle(
+                                    fontFamily: 'Manrope',
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 30,
+                                    color: Color.fromARGB(255, 0, 0, 0),
                                   ),
-                                  Container(
-                                    height: 20,
+                                ),
+                                Container(
+                                  height: 20,
+                                ),
+                                Text(
+                                  "Marca",
+                                  style: TextStyle(
+                                    fontFamily: 'Manrope',
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 0, 0, 0),
                                   ),
-                                  Text(
-                                    "Marca",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
+                                ),
+                                _marcaTextFormField(state.marks),
+                                Text(
+                                  "Ano",
+                                  style: TextStyle(
+                                    fontFamily: 'Manrope',
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 0, 0, 0),
                                   ),
-                                  _marcaTextFormField(),
-                                  Text(
-                                    "Ano",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
+                                ),
+                                _anoTextFormField(),
+                                Text(
+                                  "Combustível",
+                                  style: TextStyle(
+                                    fontFamily: 'Manrope',
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 0, 0, 0),
                                   ),
-                                  _anoTextFormField(),
-                                  Text(
-                                    "Combustível",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                  ),
-                                  _gasolinaSelect(),
-                                ],
-                              ),
+                                ),
+                                _gasolinaSelect(),
+                              ],
                             ),
                           ),
-                          Flexible(
-                            flex: 1,
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "",
+                                  style: TextStyle(
+                                    fontFamily: 'Manrope',
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 30,
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                  ),
+                                ),
+                                Container(
+                                  height: 20,
+                                ),
+                                Text(
+                                  "Modelo",
+                                  style: TextStyle(
+                                    fontFamily: 'Manrope',
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                  ),
+                                ),
+                                _modeloTextFormField(state.models),
+                                Text(
+                                  "Cor",
+                                  style: TextStyle(
+                                    fontFamily: 'Manrope',
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                  ),
+                                ),
+                                _corTextFormField(),
+                                Text(
+                                  "Kilometragem",
+                                  style: TextStyle(
+                                    fontFamily: 'Manrope',
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 15,
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                  ),
+                                ),
+                                _kilometragemTextFormField(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: 40,
+              ),
+              _DadosDoCliente(
+                onNameChanged: onNameChanged,
+                onCellChanged: onCellChanged,
+                onEmailChanged: onEmailChanged,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 50, 0, 50),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        children: [
+                          Container(
+                            color: Color.fromARGB(255, 255, 81, 0),
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "",
+                              padding: const EdgeInsets.all(1.0),
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Color.fromARGB(255, 255, 255, 255),
+                                ),
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(24, 11, 24, 11),
+                                  child: Text(
+                                    'Sair',
                                     style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 30,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
+                                        fontFamily: 'Manrope',
+                                        fontSize: 14,
+                                        color: Color.fromARGB(255, 255, 81, 0)),
                                   ),
-                                  Container(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    "Modelo",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                  ),
-                                  _modeloTextFormField(),
-                                  Text(
-                                    "Cor",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                  ),
-                                  _corTextFormField(),
-                                  Text(
-                                    "Kilometragem",
-                                    style: TextStyle(
-                                      fontFamily: 'Manrope',
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 15,
-                                      color: Color.fromARGB(255, 0, 0, 0),
-                                    ),
-                                  ),
-                                  _kilometragemTextFormField(),
-                                ],
+                                ),
                               ),
                             ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 40,
-                ),
-                _DadosDoCliente(
-                  onNameChanged: onNameChanged,
-                  onCellChanged: onCellChanged,
-                  onEmailChanged: onEmailChanged,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 50, 0, 50),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: [
-                            Container(
-                              color: Color.fromARGB(255, 255, 81, 0),
-                              child: Padding(
-                                padding: const EdgeInsets.all(1.0),
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Color.fromARGB(255, 255, 255, 255),
-                                  ),
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.fromLTRB(24, 11, 24, 11),
-                                    child: Text(
-                                      'Sair',
-                                      style: TextStyle(
-                                          fontFamily: 'Manrope',
-                                          fontSize: 14,
-                                          color:
-                                              Color.fromARGB(255, 255, 81, 0)),
-                                    ),
-                                  ),
-                                ),
-                              ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Color.fromARGB(255, 255, 81, 0),
                             ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: [
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                primary: Color.fromARGB(255, 255, 81, 0),
-                              ),
-                              onPressed: () async {
-                                var result = await locator
-                                    .get<OrderController>()
-                                    .post(
+                            onPressed: () async {
+                              var result =
+                                  await locator.get<OrderController>().post(
                                         nomeCompletoController.text,
                                         cpfController.text,
                                         celularController.text,
@@ -602,81 +635,66 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                                         _licensePlate,
                                         kilometragemTextController.text,
                                         int.parse(
-                                            combustivelTextController.text));
-                                if (result) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => VehicleData(
-                                              nomeCliente: nomeCliente,
-                                              email: email,
-                                              celular: celular,
-                                              placaCliente: placaCliente,
-                                            )),
-                                  );
-                                }
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(24, 11, 24, 11),
-                                child: Text(
-                                  'Cadastrar Passante',
-                                  style: TextStyle(
-                                    fontFamily: 'Manrope',
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                  ),
+                                          gasolinaSelecionada?.code ?? '1',
+                                        ),
+                                      );
+                              if (result) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => VehicleData(
+                                            nomeCliente: nomeCliente,
+                                            email: email,
+                                            celular: celular,
+                                            placaCliente: placaCliente,
+                                          )),
+                                );
+                              }
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(24, 11, 24, 11),
+                              child: Text(
+                                'Cadastrar Passante',
+                                style: TextStyle(
+                                  fontFamily: 'Manrope',
+                                  fontSize: 14,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Widget _marcaTextFormField() {
-    return TextFormField(
-      controller: marcaTextController,
-    );
+  Widget _errorState() {
+    return Text('Error ao carregar informações');
   }
 
-  Widget _modeloTextFormField() {
-    return TextFormField(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-    );
+  Widget _marcaTextFormField(List<MarkModel> models) {
+    return MarksDropdown(models);
+  }
+
+  Widget _modeloTextFormField(List<Model> models) {
+    return _ModelsDropdown(models);
   }
 
   Widget _gasolinaSelect() {
-    return DropdownButton<Gasolina>(
-        items: [
-          DropdownMenuItem<Gasolina>(
-              value: Gasolina('1', 'Gasolina'), child: Text('Gasolina')),
-          DropdownMenuItem<Gasolina>(
-              value: Gasolina('2', 'Alcool'), child: Text('Alcool'))
-        ],
-        onChanged: (gasolina) {
-          gasolinaSelecionada = gasolina;
-        });
+    return _GasolinaDropdown();
   }
 
   Widget _anoTextFormField() {
     return TextFormField(
       controller: anoTextController,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-    );
-  }
-
-  Widget _combustivelTextFormField() {
-    return TextFormField(
-      controller: combustivelTextController,
       autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
@@ -692,6 +710,133 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
     return TextFormField(
       controller: kilometragemTextController,
       autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+}
+
+class MarksDropdown extends StatefulWidget {
+  final List<MarkModel> models;
+
+  MarksDropdown(this.models, {Key? key}) : super(key: key);
+
+  @override
+  State<MarksDropdown> createState() => _MarksDropdownState();
+}
+
+class _MarksDropdownState extends State<MarksDropdown> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Color(0x0FE8DEF2),
+      child: DropdownButton<MarkModel>(
+        value: widget.models[0],
+        elevation: 16,
+        underline: Container(
+          height: 2,
+          color: Colors.black,
+        ),
+        onChanged: (MarkModel? newValue) {
+          setState(() {
+            markModelSelecionada = newValue!;
+            if (markModelSelecionada != null) {
+              context
+                  .read<AddOrderBloc>()
+                  .add(AddOrderSelectedMark(markModelSelecionada!));
+            }
+          });
+        },
+        items: widget.models
+            .map<DropdownMenuItem<MarkModel>>((MarkModel value) {
+              return DropdownMenuItem<MarkModel>(
+                value: value,
+                child: Text(value.name ?? ''),
+              );
+            })
+            .toSet()
+            .toList(),
+      ),
+    );
+  }
+}
+
+class _ModelsDropdown extends StatefulWidget {
+  final List<Model> models;
+
+  const _ModelsDropdown(this.models, {Key? key}) : super(key: key);
+
+  @override
+  State<_ModelsDropdown> createState() => _ModelsDropdownState();
+}
+
+class _ModelsDropdownState extends State<_ModelsDropdown> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AddOrderBloc, AddOrderState>(
+      builder: (context, state) {
+        if (state is AddOrderLoadModelsInProgress) {
+          return CircularProgressIndicator();
+        }
+        return Container(
+          color: Color.fromARGB(15, 232, 222, 242),
+          child: DropdownButton<Model>(
+            value: widget.models.isNotEmpty ? widget.models.first : null,
+            elevation: 16,
+            underline: Container(
+              height: 2,
+              color: Colors.black,
+            ),
+            onChanged: (Model? newValue) {
+              setState(() {
+                modelSelect = newValue!;
+              });
+            },
+            items: widget.models.map<DropdownMenuItem<Model>>((Model value) {
+              return DropdownMenuItem<Model>(
+                value: value,
+                child: Text(value.name ?? ''),
+              );
+            }).toList(),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _GasolinaDropdown extends StatefulWidget {
+  const _GasolinaDropdown({Key? key}) : super(key: key);
+
+  @override
+  State<_GasolinaDropdown> createState() => _GasolinaDropdownState();
+}
+
+class _GasolinaDropdownState extends State<_GasolinaDropdown> {
+  String? dropdownValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Color.fromARGB(15, 232, 222, 242),
+      child: DropdownButton<Gasolina>(
+        value: gasolinaSelecionada,
+        elevation: 16,
+        underline: Container(
+          height: 2,
+          color: Colors.black,
+        ),
+        onChanged: (Gasolina? newValue) {
+          setState(() {
+            gasolinaSelecionada = newValue!;
+          });
+        },
+        items: [Gasolina('1', 'Gasolina'), Gasolina('2', 'Alcool')]
+            .map<DropdownMenuItem<Gasolina>>((Gasolina value) {
+          return DropdownMenuItem<Gasolina>(
+            value: value,
+            child: Text(value.nome),
+          );
+        }).toList(),
+      ),
     );
   }
 }
@@ -862,9 +1007,12 @@ class _DadosDoClienteState extends State<_DadosDoCliente> {
   }
 }
 
-class Gasolina {
+class Gasolina extends Equatable {
   final String code;
   final String nome;
 
   Gasolina(this.code, this.nome);
+
+  @override
+  List<Object?> get props => [code, nome];
 }

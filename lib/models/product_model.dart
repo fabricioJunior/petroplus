@@ -12,7 +12,11 @@ class ProductModel {
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
         meta: MetaModel.fromJson(json["meta"]),
-        itemsModel: List<ItemModel>.from(json["items"].map((x) => ItemModel.fromJson(x))),
+        itemsModel: List<ItemModel>.from(
+          json["items"].map(
+            (x) => ItemModel.fromJson(x),
+          ),
+        ),
       );
 
   Map<String, dynamic> toJson() => {

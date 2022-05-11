@@ -23,4 +23,20 @@ class ServicesRepository {
       throw GenericException(e.toString());
     }
   }
+
+  Future<bool> post(Map<String, dynamic> data) async {
+    try {
+      await _client.post(
+        'services',
+        data: data,
+      );
+      return true;
+    } on DioError catch (e) {
+      throw getHttpClientException(e);
+    } on PlatformException {
+      throw GenericException(plataformException);
+    } catch (e) {
+      throw GenericException(e.toString());
+    }
+  }
 }
