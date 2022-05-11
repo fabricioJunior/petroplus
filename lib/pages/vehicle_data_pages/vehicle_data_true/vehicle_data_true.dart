@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -16,12 +17,14 @@ class VehicleData extends StatefulWidget {
   final String? nomeCliente;
   final String? email;
   final String? celular;
+  final String? placaCliente;
 
   const VehicleData({
     Key? key,
     this.nomeCliente,
     this.email,
     this.celular,
+    required this.placaCliente,
   }) : super(key: key);
 
   @override
@@ -109,7 +112,7 @@ class _VehicleDataState extends State<VehicleData> {
                     return Column(
                       children: [
 // ------------------------------------------------Body/Tablet
-                        if (isTablet) ...[
+                        if (isTablet || Platform.isAndroid) ...[
                           // ------------------------------------------------Checklists de Recepção
 
                           BarraHistoricoVeiculo(
@@ -117,7 +120,7 @@ class _VehicleDataState extends State<VehicleData> {
                             emailClienteTrue: widget.email ?? "Email não cadastrado",
                             modeloClienteTrue: _modeloVehicleDataTrue ?? "Modelo não cadastrado",
                             nomeClienteTrue: widget.nomeCliente ?? "Nome não cadastrado",
-                            placaClienteTrue: _placaVehicleDataTrue,
+                            placaClienteTrue: widget.placaCliente,
                             statusClienteTrue: _statusVehicleDataTrue ??
                                 " Status não cadastrado",
                           ),
@@ -185,7 +188,8 @@ class _VehicleDataState extends State<VehicleData> {
                                                     return EndReceptionPage(
                                                       nomeCliente: widget.nomeCliente,
                                                       email: widget.email,
-                                                      celular: widget.celular
+                                                      celular: widget.celular,
+                                                      placaCliente: widget.placaCliente,
                                                     );
                                                   }
                                                 ),
@@ -253,14 +257,14 @@ class BarraHistoricoVeiculo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 150,
       width: double.infinity,
       child: Row(
         children: [
           Flexible(
             flex: 2,
-            child: Container(
+            child: SizedBox(
               height: double.infinity,
               width: double.infinity,
               child: Column(
@@ -277,15 +281,15 @@ class BarraHistoricoVeiculo extends StatelessWidget {
                     ),
                     child: Center(
                       child: placaClienteTrue == null
-                          ? CircularProgressIndicator()
-                          : Text(
-                              "$placaClienteTrue",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: 'Manrope',
-                                fontWeight: FontWeight.w800,
-                              ),
+                        ? CircularProgressIndicator()
+                        : Text(
+                            placaClienteTrue?.toUpperCase() ?? 'SEM PLACA',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Manrope',
+                              fontWeight: FontWeight.w800,
                             ),
+                          ),
                     ),
                   ),
                   Container(
@@ -306,7 +310,7 @@ class BarraHistoricoVeiculo extends StatelessWidget {
           ),
           Flexible(
             flex: 3,
-            child: Container(
+            child: SizedBox(
               height: double.infinity,
               width: double.infinity,
               child: Column(

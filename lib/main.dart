@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:petroplus/service_locator.dart';
 
-import 'adapters/cache/petroplus_storages.dart';
+import 'adapters/cache/hive/storages_controller.dart';
 import 'adapters/clients/firebase.dart';
 import 'pages/splash.dart';
-import 'storages/storages_controller.dart';
+import 'storage/petroplus_storages.dart';
 
 void main() async {
   await Hive.initFlutter();

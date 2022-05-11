@@ -12,9 +12,7 @@ class ServiceRepository {
 
   Future<ServiceModel> getServices() async {
     try {
-      Response response = await _client.get(
-        'products?recommendations=true',
-      );
+      Response response = await _client.get('services');
       final result = ServiceModel.fromJson(response.data);
       return result;
     } on DioError catch (e) {

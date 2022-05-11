@@ -1,9 +1,10 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:petroplus/controllers/vehicle_controler.dart';
+import 'package:petroplus/widgets/circular_progress.dart';
+import '../models/vehicle_model.dart';
+import '../pages/reception_checklists/widgets/vehicle_details_dialog.dart';
 import '../service_locator.dart';
-
-import '../pages/dashboard_page/controles/x_order_state.dart';
-import '../controllers/x_order/x_order_controler.dart';
 
 double porcentagemVendas = 30;
 double revisaoVendas = 50;
@@ -16,14 +17,7 @@ class IncomingAppointmentsTablet extends StatefulWidget {
       _IncomingAppointmentsTabletState();
 }
 
-class _IncomingAppointmentsTabletState
-    extends State<IncomingAppointmentsTablet> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    locator.get<XOrderController>().getXOrders();
-  }
+class _IncomingAppointmentsTabletState extends State<IncomingAppointmentsTablet> {
 
 // __________________________________________________
   @override
@@ -151,47 +145,43 @@ class _IncomingAppointmentsTabletState
                             height: 290,
                             color: Color.fromARGB(255, 255, 255, 255),
                             // --------------------Inicio Loop Back
-                            child: ValueListenableBuilder<StateTodo>(
-                              valueListenable: locator.get<XOrderController>(),
-                              builder: (context, value, _) {
-                                final state = value;
-                                if (state is StateTodoLoading) {
-                                  return Center(
-                                      child: CircularProgressIndicator());
+                            child: FutureBuilder<List<VehicleModel>>(
+                              future: locator.get<VehicleController>().get(),
+                              builder: (context, snapshot) {
+                                
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return buildCircularProgress();
                                 }
-                                if (state is StateTodoSuccess) {
+
+                                if (snapshot.hasData) {
+
+                                  final vehicles = snapshot.data;
+
                                   return ListView.builder(
-                                      itemCount: state.todoSuccess.length,
-                                      itemBuilder: (context, indice) {
-                                        return Column(
-                                          children: [
-                                            Container(
-                                              height: 5,
-                                            ),
-                                            ConteudoVeiculoDashboard(
-                                              placaVeiculo: (state
-                                                      .todoSuccess[indice]
-                                                      .license_plate ??
-                                                  ""),
-                                              modeloVeiculo: (state
-                                                  .todoSuccess[indice]
-                                                  .customer_name),
-                                              dataVeiculo: (state
-                                                  .todoSuccess[indice].status),
-                                            ),
-                                            Container(
-                                              height: 5,
-                                            ),
-                                          ],
-                                        );
-                                      });
+                                    itemCount: vehicles?.length ?? 0,
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        children: [
+                                          SizedBox(height: 5),
+                                          ConteudoVeiculoDashboard(
+                                            vehicleModel: vehicles![index],
+                                            placaVeiculo: (vehicles[index].licensePlate ?? ""),
+                                            modeloVeiculo: (vehicles[index].vehicleModelId.toString()),
+                                            dataVeiculo: (vehicles[index].vehicleYear),
+                                          ),
+                                          Container(
+                                            height: 5,
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  return Center(child: Text('Nenhum veículo encontrado'));
                                 }
-                                if (state is StateTodoError) {
-                                  return Center(child: Text(state.todoError));
-                                }
-                                return Container();
-                              },
-                            ),
+
+                              }
+                            )
                           ),
                         ],
                       ),
@@ -245,15 +235,7 @@ class IncomingAppointmentsMobile extends StatefulWidget {
       _IncomingAppointmentsMobileState();
 }
 
-class _IncomingAppointmentsMobileState
-    extends State<IncomingAppointmentsMobile> {
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    locator.get<XOrderController>().getXOrders();
-  }
+class _IncomingAppointmentsMobileState extends State<IncomingAppointmentsMobile> {
 
   @override
   Widget build(BuildContext context) {
@@ -377,46 +359,42 @@ class _IncomingAppointmentsMobileState
                           width: double.maxFinite,
                           height: 290,
                           color: Color.fromARGB(255, 255, 255, 255),
-                          child: ValueListenableBuilder<StateTodo>(
-                            valueListenable: locator.get<XOrderController>(),
-                            builder: (context, value, _) {
-                              final state = value;
-                              if (state is StateTodoLoading) {
-                                return Center(
-                                    child: CircularProgressIndicator());
+                          child: FutureBuilder<List<VehicleModel>>(
+                            future: locator.get<VehicleController>().get(),
+                            builder: (context, snapshot) {
+                              
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return buildCircularProgress();
                               }
-                              if (state is StateTodoSuccess) {
+
+                              if (snapshot.hasData) {
+
+                                final vehicles = snapshot.data;
+
                                 return ListView.builder(
-                                    itemCount: state.todoSuccess.length,
-                                    itemBuilder: (context, indice) {
-                                      return Column(
-                                        children: [
-                                          Container(
-                                            height: 5,
-                                          ),
-                                          ConteudoVeiculoDashboard(
-                                            placaVeiculo: (state
-                                                    .todoSuccess[indice]
-                                                    .license_plate ??
-                                                ""),
-                                            modeloVeiculo: (state
-                                                .todoSuccess[indice]
-                                                .customer_name),
-                                            dataVeiculo: (state
-                                                .todoSuccess[indice].status),
-                                          ),
-                                          Container(
-                                            height: 5,
-                                          ),
-                                        ],
-                                      );
-                                    });
+                                  itemCount: vehicles?.length ?? 0,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        SizedBox(height: 5),
+                                        ConteudoVeiculoDashboard(
+                                          vehicleModel: vehicles![index],
+                                          placaVeiculo: (vehicles[index].licensePlate ?? ""),
+                                          modeloVeiculo: (vehicles[index].vehicleModelId.toString()),
+                                          dataVeiculo: (vehicles[index].vehicleYear),
+                                        ),
+                                        Container(
+                                          height: 5,
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              } else {
+                                return Center(child: Text('Nenhum veículo encontrado'));
                               }
-                              if (state is StateTodoError) {
-                                return Center(child: Text(state.todoError));
-                              }
-                              return Container();
-                            },
+
+                            }
                           ),
                         ),
                       ],
@@ -459,11 +437,13 @@ class _IncomingAppointmentsMobileState
 }
 
 class ConteudoVeiculoDashboard extends StatelessWidget {
+  final VehicleModel vehicleModel;
   ConteudoVeiculoDashboard({
     Key? key,
     required this.placaVeiculo,
     required this.modeloVeiculo,
     required this.dataVeiculo,
+    required this.vehicleModel,
   }) : super(key: key);
 
   String? placaVeiculo;
@@ -472,80 +452,100 @@ class ConteudoVeiculoDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 10,
-        ),
-        Row(
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              flex: 7,
-              child: Container(
-                height: 35,
-                // width: 70,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/img/placa.png'),
-                    fit: BoxFit.contain,
+    return InkWell(
+      onTap: () {
+        showDialog(
+          context: context, 
+          useRootNavigator: true,
+          builder: (_) => VehicleDetailsDialog(
+            isTablet: true,
+            nome: vehicleModel.customerName,
+            email: vehicleModel.email,
+            celular: vehicleModel.phoneNumber,
+            modelo: vehicleModel.vehicleModelId.toString(),
+            ano: vehicleModel.vehicleYear,
+            cor: vehicleModel.vehicleColor,
+            km: vehicleModel.mileage,
+            placa: vehicleModel.licensePlate,
+            mecanico: 'Não definido',
+          ),
+        );
+      },
+      child: Column(
+        children: [
+          Container(
+            height: 10,
+          ),
+          Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                flex: 7,
+                child: Container(
+                  height: 35,
+                  // width: 70,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/img/placa.png'),
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                ),
-                child: Center(
-                  child: Text(
-                    "$placaVeiculo",
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 46, 44, 52),
-                      fontSize: 13,
-                      fontFamily: 'Manrope',
-                      fontWeight: FontWeight.w800,
+                  child: Center(
+                    child: Text(
+                      "$placaVeiculo",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 46, 44, 52),
+                        fontSize: 13,
+                        fontFamily: 'Manrope',
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Flexible(
-              flex: 1,
-              child: Container(),
-            ),
-            Flexible(
-              flex: 10,
-              child: Container(
-                child: Center(
-                  child: Text(
-                    '$modeloVeiculo',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 46, 44, 52),
-                      fontSize: 10,
-                      fontFamily: 'Manrope',
-                      fontWeight: FontWeight.w500,
+              Flexible(
+                flex: 1,
+                child: Container(),
+              ),
+              Flexible(
+                flex: 10,
+                child: Container(
+                  child: Center(
+                    child: Text(
+                      '$modeloVeiculo',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 46, 44, 52),
+                        fontSize: 10,
+                        fontFamily: 'Manrope',
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Flexible(
-              flex: 10,
-              child: Container(
-                child: Center(
-                  child: Text(
-                    '$dataVeiculo',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 46, 44, 52),
-                      fontSize: 10,
-                      fontFamily: 'Manrope',
-                      fontWeight: FontWeight.w500,
+              Flexible(
+                flex: 10,
+                child: Container(
+                  child: Center(
+                    child: Text(
+                      '$dataVeiculo',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 46, 44, 52),
+                        fontSize: 10,
+                        fontFamily: 'Manrope',
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-        Container(
-          height: 10,
-        ),
-      ],
+            ],
+          ),
+          Container(
+            height: 10,
+          ),
+        ],
+      ),
     );
   }
 }

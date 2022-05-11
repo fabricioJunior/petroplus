@@ -12,8 +12,10 @@ class OrdersListModel extends Equatable {
             .toList();
 
   OrderModel? getByLiscencePlate(String licensePlate) {
-    var busca = orders.where(
-        (order) => order.licensePlate?.replaceAll(' ', '') == licensePlate);
+    var busca = orders
+        .where((order) =>
+            order.licensePlate?.toLowerCase() == licensePlate.toLowerCase())
+        .toList();
     if (busca.isNotEmpty) {
       return busca.first;
     }

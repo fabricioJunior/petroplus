@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../controllers/add_order_controller.dart';
+import '../../../controllers/order_controller.dart';
 import '../../../service_locator.dart';
 import '../../../widgets/appbar_uni_widget.dart';
 import '../../add_passenger/add_passenger_page.dart';
@@ -159,6 +159,7 @@ class _VehicleDataFalseState extends State<VehicleDataFalse> {
                             nomeCliente: _nomeVehicleDataTrue,
                             email: _emailVehicleDataTrue,
                             celular: _contatoVehicleDataTrue,
+                            placaCliente: widget.licensePlate,
                           ),
                         ],
 // ------------------------------------------------Body/Mobile
@@ -227,7 +228,7 @@ class BarraHistoricoVeiculo extends StatelessWidget {
                       child: placaClienteTrue == null
                           ? CircularProgressIndicator()
                           : Text(
-                              "$placaClienteTrue",
+                              placaClienteTrue?.toUpperCase() ?? 'SEM PLACA',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: 'Manrope',
@@ -392,17 +393,19 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
 
   final String? nomeCliente;
   final String? celular;
+  final String? placaCliente;
   final String? email;
 
-  FormularioDeEntradaPostVeiculo({
-    Key? key,
-    required this.onNameChanged,
-    required this.onCellChanged,
-    required this.onEmailChanged,
-    required this.nomeCliente,
-    required this.email,
-    required this.celular,
-  }) : super(key: key);
+  FormularioDeEntradaPostVeiculo(
+      {Key? key,
+      required this.onNameChanged,
+      required this.onCellChanged,
+      required this.onEmailChanged,
+      required this.nomeCliente,
+      required this.email,
+      required this.celular,
+      required this.placaCliente})
+      : super(key: key);
   final preferences = SharedPreferences.getInstance();
 
   @override
@@ -588,13 +591,13 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                               ),
                               onPressed: () async {
                                 var result = await locator
-                                    .get<AddOrderController>()
-                                    .onCreateNewOrder(
+                                    .get<OrderController>()
+                                    .post(
                                         nomeCompletoController.text,
                                         cpfController.text,
                                         celularController.text,
                                         emailController.text,
-                                        '${anoTextController.text}-${gasolinaSelecionada?.code}',
+                                        anoTextController.text,
                                         corTextController.text,
                                         _licensePlate,
                                         kilometragemTextController.text,
@@ -608,6 +611,7 @@ class FormularioDeEntradaPostVeiculo extends StatelessWidget {
                                               nomeCliente: nomeCliente,
                                               email: email,
                                               celular: celular,
+                                              placaCliente: placaCliente,
                                             )),
                                   );
                                 }

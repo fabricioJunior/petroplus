@@ -1,8 +1,8 @@
 import '../../models/order_model.dart';
-import '../../storages/hive_boxes.dart';
-import '../../storages/store_adapter.dart';
-import '../../storages/storage_entity.dart';
-import '../../storages/store_base.dart';
+import '../adapters/cache/hive/hive_boxes.dart';
+import '../adapters/cache/hive/storage_entity.dart';
+import '../adapters/cache/hive/store_adapter.dart';
+import '../adapters/cache/hive/store_base.dart';
 
 class OrderStore extends StoreBase<OrderModel> {
   @override

@@ -5,24 +5,23 @@ import '../errors/excepions.dart';
 
 import '../repositories/order_repository.dart';
 
-class AddOrderController {
-  final OrderRepository _orderRepository;
+class OrderController {
+  final OrderRepository _repository;
 
-  AddOrderController(this._orderRepository);
+  OrderController(this._repository);
 
-  // Future<void> onGetVehicleByLicensePlate(String licensePlate) async {
-  //   try {
-  //     VehicleModel? model =
-  //         await _orderRepository.getVehicleByLicensePlate(licensePlate);
-  //     await _orderRepository.saveOrder(model.toJsonPost());
-  //   } on HttpClientException catch (e) {
-  //     showAlert(e.message!, isError: true);
-  //   } catch (e) {
-  //     showAlert(e.toString(), isError: true);
-  //   }
-  // }
+  Future<OrderModel?> getByLicensePlate(String licensePlate) async {
+    try {
+      return await _repository.getByLicensePlate(licensePlate);
+    } on HttpClientException catch (e) {
+      showAlert(e.message!, isError: true);
+    } catch (e) {
+      showAlert(e.toString(), isError: true);
+    }
+    return null;
+  }
 
-  Future<bool> onCreateNewOrder(
+  Future<bool> post(
     String nome,
     String cpf,
     String telefone,
@@ -44,8 +43,7 @@ class AddOrderController {
         licensePlate: placa,
         mileage: quilometragem,
       );
-      await _orderRepository.saveOrder(newOrder.toJson());
-      return true;
+      return await _repository.post(newOrder.toJson());
     } on HttpClientException catch (e) {
       showAlert(e.message!, isError: true);
     } catch (e) {

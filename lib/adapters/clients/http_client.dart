@@ -14,20 +14,24 @@ Dio client() {
 }
 
 InterceptorsWrapper interceptors() =>
-  InterceptorsWrapper(onRequest: (options, handler) async {
-    final preferences = await SharedPreferences.getInstance();
-    var token = preferences.get('token').toString();
+  InterceptorsWrapper(
+    onRequest: (options, handler) async {
+      final preferences = await SharedPreferences.getInstance();
+      var token = preferences.get('token').toString();
 
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
-    options.headers.addAll(headers);
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+      options.headers.addAll(headers);
 
-    return handler.next(options); //continue
-  }, onResponse: (response, handler) {
+      return handler.next(options); //continue
+    }, 
+  onResponse: (response, handler) {
     return handler.next(response); // continue
-  }, onError: (DioError e, handler) {
+  }, 
+  onError: (DioError e, handler) {
     return handler.next(e); //continue
-  });
+  }
+);

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import '../storages/storage_entity.dart';
+import '../adapters/cache/hive/storage_entity.dart';
 
 OrderModel orderModelFromJson(String str) =>
     OrderModel.fromJson(json.decode(str));
@@ -40,7 +40,7 @@ class OrderModel extends StorageEntity {
 
   factory OrderModel.fromJson(Map<String, dynamic> json) => OrderModel(
         customerId: json["customer_id"],
-        customerVehicleId: json["customer_vehicleId"],
+        customerVehicleId: json["customer_vehicle_id"],
         customerName: json["customer_name"],
         customerDocument: json["customer_document"],
         phoneNumber: json["phone_number"],
@@ -49,14 +49,14 @@ class OrderModel extends StorageEntity {
         vehicleModelId: json["vehicle_model_id"],
         vehicleYear: json["vehicle_year"],
         vehicleColor: json["vehicle_color"],
-        clientId: json["client_Id"],
+        clientId: json["client_id"],
         licensePlate: json["license_plate"],
         mileage: json["mileage"],
       );
 
   static List<OrderModel> getList(dynamic map) {
     return List.from(map).map((e) => OrderModel.fromJson(e)).toList();
-  } 
+  }
 
   OrderModel.fromStorage(Map<String, dynamic> props)
       : licensePlate = props['licensePlate'];

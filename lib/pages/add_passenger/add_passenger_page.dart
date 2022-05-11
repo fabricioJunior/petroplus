@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:petroplus/controllers/order_controller.dart';
+import '../../blocs/passager_bloc/add_passenger_bloc/add_passager_bloc.dart';
 import '../../repositories/order_repository.dart';
 import '../../service_locator.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../blocs/add_passager_bloc/add_passager_bloc.dart';
 import '../drawer_menu.dart/navigation_drawer_menu.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -69,7 +70,9 @@ class AddPassenger extends StatelessWidget {
         if (_state.containsOrder) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => VehicleData()),
+            MaterialPageRoute(builder: (context) => VehicleData(
+              placaCliente: analisePlacaInterno.text,
+            )),
           );
         } else {
           Navigator.push(
@@ -154,7 +157,7 @@ class AddPassenger extends StatelessWidget {
                                     fontSize: 35,
                                     color: Color.fromARGB(255, 33, 32, 34)),
                                 decoration: InputDecoration(
-                                  labelText: 'DIGITE A PLACA',
+                                  hintText: 'DIGITE A PLACA',
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                       color: Color.fromARGB(0, 255, 81, 0),
@@ -176,28 +179,26 @@ class AddPassenger extends StatelessWidget {
                                 primary: Color.fromARGB(255, 255, 81, 0),
                               ),
                                 onPressed: () async {
-                                var order = await locator
-                                    .get<OrderRepository>()
-                                    .getOrderByLicensePlate(
-                                        analisePlacaInterno.text);
+                                
+                                var order = await locator.get<OrderController>().getByLicensePlate(analisePlacaInterno.text);
 
                                 if (order != null) {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => VehicleData(
-                                          nomeCliente: order.customerName,
-                                          celular: order.phoneNumber,
-                                          email: order.email,
-                                        )),
+                                      builder: (context) => VehicleData(
+                                        nomeCliente: order.customerName,
+                                        celular: order.phoneNumber,
+                                        email: order.email,
+                                        placaCliente: analisePlacaInterno.text,
+                                      )
+                                    ),
                                   );
                                 } else {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => VehicleDataFalse(
-                                          licensePlate:
-                                              analisePlacaInterno.text),
+                                      builder: (context) => VehicleDataFalse(licensePlate: analisePlacaInterno.text),
                                     ),
                                   );
                                 }
@@ -225,14 +226,16 @@ class AddPassenger extends StatelessWidget {
                               onPressed: () async {
                                 var order = await locator
                                     .get<OrderRepository>()
-                                    .getOrderByLicensePlate(
+                                    .getByLicensePlate(
                                       analisePlacaInterno.text,
                                     );
                                 if (order != null) {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => VehicleData()),
+                                        builder: (context) => VehicleData(
+                                          placaCliente: analisePlacaInterno.text,
+                                        )),
                                   );
                                 } else {
                                   Navigator.push(

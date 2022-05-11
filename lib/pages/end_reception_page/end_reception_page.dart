@@ -16,12 +16,14 @@ class EndReceptionPage extends StatefulWidget {
   final String? nomeCliente;
   final String? email;
   final String? celular;
+  final String? placaCliente;
 
   const EndReceptionPage({
     Key? key,
     required this.nomeCliente,
     required this.email,
     required this.celular,
+    required this.placaCliente,
   }) : super(key: key);
 
   @override
@@ -143,7 +145,7 @@ class _EndReceptionPageState extends State<EndReceptionPage> {
                                 "Modelo não cadastrado",
                             nomeClienteTrue:
                                 widget.nomeCliente ?? "Nome não cadastrado",
-                            placaClienteTrue: _placaVehicleDataTrue,
+                            placaClienteTrue: widget.placaCliente,
                             statusClienteTrue: _statusVehicleDataTrue ??
                                 " Status não cadastrado",
                           ),
@@ -331,7 +333,7 @@ class BarraHistoricoVeiculo extends StatelessWidget {
                       child: placaClienteTrue == null
                           ? CircularProgressIndicator()
                           : Text(
-                              "$placaClienteTrue",
+                              placaClienteTrue?.toUpperCase() ?? 'SEM PLACA',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: 'Manrope',
@@ -492,7 +494,7 @@ class MyStatefulWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Column(
-            children: [
+            children: const [
               Text(
                 "Finalizar Recepção",
                 style: TextStyle(

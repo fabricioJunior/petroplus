@@ -49,7 +49,7 @@ class _SplashState extends State<Splash> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'img/logofundobranco.png',
+                    'assets/img/logofundobranco.png',
                   ),
                 ],
               ),

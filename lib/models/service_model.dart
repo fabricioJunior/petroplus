@@ -19,7 +19,7 @@ class ServiceModel {
 
   factory ServiceModel.fromJson(Map<String, dynamic> json) => ServiceModel(
         meta: MetaModel.fromJson(json["meta"]),
-        itemsModel: List<ItemModel>.from(json["items"].map((x) => ItemModel.fromJson(x))),
+        itemsModel: json["items"] != null ? List<ItemModel>.from(json["items"].map((x) => ItemModel.fromJson(x))) : null,
       );
 
   Map<String, dynamic> toJson() => {
